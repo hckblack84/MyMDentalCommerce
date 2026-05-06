@@ -1,0 +1,7 @@
+.text-center{
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    position: relative;
+    color: purple;
+}

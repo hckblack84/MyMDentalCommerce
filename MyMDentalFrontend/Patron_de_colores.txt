@@ -1,0 +1,12 @@
+Opción A: Limpia y Profesional (Minimalista)
+
+Esta opción permite que el logo destaque sobre un fondo neutro.
+
+    Fondo: #F8F9FA (Blanco hueso/Gris muy claro)
+
+    Color de Acento (Botones): #00C2CB (El cian del logo)
+
+    Texto Principal: #2D3436 (Gris oscuro, casi negro)
+
+    Detalles/Llamados a la acción: #FF007F (Rosa para resaltar ofertas)
+

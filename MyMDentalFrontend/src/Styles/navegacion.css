@@ -1,0 +1,83 @@
+.navbar {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px); /* Efecto de desenfoque al fondo */
+  border-bottom: 3px solid #00C2CB; /* Línea Cian del logo */
+  padding: 0.8rem 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar-brand.logo img {
+  height: 65px;
+  width: auto;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
+  border-radius: 12px;
+}
+
+.navbar-brand.logo img:hover {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+.nav-link {
+  color: #004B49 !important; /* Verde oscuro para lectura clara */
+  font-weight: 600;
+  margin: 0 10px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #FF007F; /* Rosa vibrante */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #FF007F !important;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.mega-menu-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw;
+  background: white;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border-bottom: 4px solid #32CD32; /* Verde Lima */
+  animation: fadeInDown 0.4s ease forwards;
+}
+
+.columna-categoria a {
+  display: block;
+  padding: 10px;
+  color: #555;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.columna-categoria a:hover {
+  background: #f0fdfa; /* Fondo cian muy clarito */
+  color: #00C2CB;
+  padding-left: 15px; /* Efecto de desplazamiento */
+}
+
+/* Animación de entrada */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

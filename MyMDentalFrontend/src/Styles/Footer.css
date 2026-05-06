@@ -1,0 +1,116 @@
+/* =============================================
+   FOOTER — MYM Insumos Dentales
+   Paleta: #F8F9FA | #00C2CB | #2D3436 | #FF007F
+============================================= */
+
+.footer {
+  background-color: #2D3436;
+  padding: 2rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* --- Links de navegación --- */
+.links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.links a {
+  color: #F8F9FA;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #00C2CB;
+  transition: width 0.25s ease;
+}
+
+.links a:hover {
+  color: #00C2CB;
+}
+
+.links a:hover::after {
+  width: 100%;
+}
+
+/* --- Divisor decorativo --- */
+.footer::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #00C2CB;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Iconos de redes sociales --- */
+.svg-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.svg-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 194, 203, 0.35);
+  background-color: transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.svg-icons a svg {
+  fill: #F8F9FA;
+  transition: fill 0.2s ease;
+}
+
+.svg-icons a:hover {
+  background-color: #00C2CB;
+  border-color: #00C2CB;
+  transform: translateY(-3px);
+}
+
+.svg-icons a:hover svg {
+  fill: #FFFFFF;
+}
+
+/* --- Copyright --- */
+.Copyright {
+  color: #b2bec3;
+  font-size: 0.78rem;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* --- Separador antes del copyright --- */
+.footer > div:last-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1rem;
+  width: 100%;
+  text-align: center;
+}
