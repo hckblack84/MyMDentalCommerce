@@ -1,13 +1,12 @@
-<p align="center">
-  <img width="600" src="https://skillicons.dev/icons?i=architecture,layers" alt="Software Architecture"/>
-</p>
 
 # MyMDentalCommerce
 
 <p align="left">
+  <img src ="https://img.shields.io/badge/Intellij%20Idea-000?logo=intellij-idea&style=flat-square">
   <img src="https://img.shields.io/badge/-Visual%20Studio%20Code-23A9F2?style=flat-square&logo=Visual%20Studio%20Code&logoColor=white"/>
   <img src="https://img.shields.io/badge/-Github-181717?style=flat-square&logo=GitHub&logoColor=white"/>
   <img src="https://img.shields.io/badge/-Git-F44D27?style=flat-square&logo=Git&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS-%F0%9F%9B%A1-orange?style=flat-square">
 </p>
 
 > [!NOTE]
