@@ -12,9 +12,19 @@ export default function Crear_cuenta() {
     const [rol, setRol] = useState("CLIENT");
     const [errores, setErrores] = useState(null);
 
+
 const manejarSubmit = async (e) => {
     e.preventDefault();
     setErrores("");
+
+
+InvalidNumbers=("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+IvnvalidCharacters=["@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".", "?","/"]
+EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
+
+
+//Apartado de validaciones para el formulario de registro
+
 
     if(nombre.length < 3){
         setErrores("El nombre debe tener al menos 3 caracteres");
@@ -26,7 +36,7 @@ const manejarSubmit = async (e) => {
         return;
     }
 
-    if (!email.includes("@gmail.com") && !email.includes("@hotmail.com")) {
+    if (email.length < 6 || !EmailContains.some(domain => email.endsWith(domain))) {
         setErrores("El email no es válido");
         return;
     }
@@ -50,6 +60,25 @@ const manejarSubmit = async (e) => {
         setErrores("El teléfono debe tener 9 dígitos");
         return;
     }
+
+    if( nombre.includes(InvalidNumbers) ||
+        nombre.includes(IvnvalidCharacters)){
+        setErrores("El nombre no puede contener números ni caracteres especiales");
+        return;
+    }
+
+    if( apellido.includes(IvnvalidCharacters) ||
+        apellido.includes(InvalidNumbers) ){
+        setErrores("El apellido no puede contener números ni caracteres especiales");
+        return;
+    }
+       
+    if(telefono.includes(IvnvalidCharacters)){
+    setErrores("El teléfono no puede contener caracteres especiales");
+    return;
+    }
+
+
 
     try {
         const response = await fetch("http://localhost:8080/MyMDentalCommerce/session/register", {
