@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5e753bd-1c6d-4237-a8b3-1f7f6edc9361" name="Changes" comment="integracion de Backen a Estructuta general del proyecto">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/MyMDentis/MyMDentistComerce/MyMDentistComerceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/MyMDentis/MyMDentistComerce/MyMDentistComerceApplication.java" afterDir="false" />
+    <list default="true" id="c5e753bd-1c6d-4237-a8b3-1f7f6edc9361" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../.idea/IdeaProjects.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,20 +13,20 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "hckblack84"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hckblack84&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/hckblack84/MyMDentalCommerce",
-    "accountId": "389ac01c-5143-443b-bf97-08e5e5571708"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hckblack84/MyMDentalCommerce&quot;,
+    &quot;accountId&quot;: &quot;389ac01c-5143-443b-bf97-08e5e5571708&quot;
   }
-}]]></component>
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -58,7 +58,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.MyMDentistComerceApplication.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Catto",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/luis/IdeaProjects/MyMDentalBackend/MyMDentistComerce",
     "node.js.detected.package.eslint": "true",
@@ -69,7 +69,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "kotlinNotebook",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -93,6 +93,8 @@
       <workItem from="1778181771879" duration="4848000" />
       <workItem from="1778504039777" duration="2636000" />
       <workItem from="1778507096697" duration="6790000" />
+      <workItem from="1778526501364" duration="420000" />
+      <workItem from="1778527039971" duration="43000" />
     </task>
     <task id="LOCAL-00001" summary="integracion de Backen a Estructuta general del proyecto">
       <option name="closed" value="true" />

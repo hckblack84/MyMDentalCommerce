@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MyMDentistComerce.iml" filepath="$PROJECT_DIR$/.idea/MyMDentistComerce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MyMDentalBackend.iml" filepath="$PROJECT_DIR$/.idea/MyMDentalBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyMDentistComerce/MyMDentistComerce.iml" filepath="$PROJECT_DIR$/MyMDentistComerce/MyMDentistComerce.iml" />
     </modules>
   </component>
 </project>
