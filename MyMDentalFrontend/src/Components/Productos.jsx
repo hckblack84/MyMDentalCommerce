@@ -2,33 +2,62 @@ import React, { useEffect, useState } from 'react'
 import "../Styles/Productos.css";
 import logoImagen from '../assets/Imagenes/Logomym.png';
 import { Link } from 'react-router-dom';
-import { useCarrito } from '../Components/CartContext';
+//import { useCarrito } from '../Components/CartContext';
+import { useCarrito } from '../Context/CartContext';
+import { useProductsState } from '../Hooks/UseProducts';
 
-export default function Productos({ urlBack }) {
-  const [productos, setProductos] = useState([])
-  const { agregarAlCarrito } = useCarrito();
+import Loader from './Loader';
 
-  const handleAgregarAlCarrito = (producto) => {
-    if (productos) {
-      agregarAlCarrito({
-        idProduct: producto.codeProduct,
-        productName: producto.productName,
-        priceProduct: producto.priceProduct,
-        cantidad: 1
-      })
-    }
+
+export default function Productos({ isFiltered = false, filter = "" }) {
+
+  const { productsState, pagesState } = useProductsState(1, isFiltered, filter);
+  const { products, loading, error, errorBody, searchProductsByPage } = productsState
+  const { maxPages, currentPage, loadingPages, errorPages, errorBodyPages, getDatesByProductsPage } = pagesState
+
+  const {addToCart} = useCarrito();
+
+  if (loading || loadingPages) {
+    return (
+      <Loader entity='Productos'/>
+    )
   }
 
-  useEffect(() => {
-    fetch(urlBack)
-      .then(response => response.json())
-      .then(data => setProductos(data))
-      .catch(error => console.error("Error al cargar productos:", error))
-  }, [urlBack])
+  if (error) {
+    const status = errorBody?.code ?? "Desconocido"
+    const message =
+      errorBody?.message ?? "Unknown"
+
+    return (
+      <>
+        <h1>Ocurrió un error, por favor inténtalo de nuevo</h1>
+        <p>code: {errorBody?.code ?? "Unknown"}</p>
+        <p>message: {errorBody?.message ?? "Unknown"}</p>
+        <button onClick={() => searchProductsByPage(1)}>Volver a cargar productos</button>
+      </>
+    )
+  }
+
+  if (errorPages){
+    return(
+      <>
+      <h1>Error con los indices de páginas</h1>
+      <p>code: {errorBodyPages?.code ?? "Unknown"}</p>
+      <p>message: {errorBodyPages?.message ?? "Unknown"}</p>
+      </>
+    );
+  }
+
+  let pagesButtons = []
+  for (let i = 1; i <= maxPages; i++){
+    pagesButtons.push(i)
+  }
+
 
   return (
+    <>
     <div className="row row-cols-1 row-cols-md-4 g-4 container mx-auto">
-      {productos.sort(() => Math.random() - 0.5).slice(0, 12).map(producto => (
+      {products.map(producto => (
         <div className="col" key={producto.codeProduct}>
           <div className="card h-100 border border-black shadow-sm">
             <img 
@@ -37,7 +66,7 @@ export default function Productos({ urlBack }) {
               alt={producto.productName} 
             />
             
-            <div className="card-body">
+            <div className="card-body" id={producto.idProduct}>
               <h5 className="card-title fw-bold">{producto.productName}</h5>
               <p className="card-text text-muted">
                 {producto.descriptionProduct}
@@ -49,14 +78,14 @@ export default function Productos({ urlBack }) {
 
             <div className="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
               <small className="text-muted">Stock: {producto.stockProduct}</small>
-              <Link to={`/producto/${producto.codeProduct}`} className="btn btn-sm btn-outline-primary">
+              <Link to={`/producto/${producto.idProduct}`} className="btn btn-sm btn-outline-primary">
                 Detalles
               </Link>           
             </div>
 
             <button
               className="btn btn-sm btn-primary w-100"
-              onClick={() => handleAgregarAlCarrito(producto)}
+              onClick={() => addToCart(producto)}
             >
               Añadir al carro socio
             </button>
@@ -64,5 +93,25 @@ export default function Productos({ urlBack }) {
         </div>
       ))}
     </div>
+
+    <div className='container'>
+        <div className='row'>
+          {pagesButtons.map((indexButton) => {
+            if (indexButton === currentPage){
+              return(
+                <button id={indexButton} className='col-1 align-center text-center' disabled>{indexButton}</button>
+              );
+            }else{
+              return(
+                <button id={indexButton} className='col-1 align-center text-center'
+                onClick={() => searchProductsByPage(indexButton)}
+                >{indexButton}</button>
+              );
+            }
+          })}
+        </div>
+
+      </div>
+    </>
   )
 }

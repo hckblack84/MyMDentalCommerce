@@ -1,54 +1,35 @@
 import React from 'react'
-import { useCarrito } from '../Components/CartContext'
+//import { useCarrito } from '../Components/CartContext'
+import { useCarrito } from '../Context/CartContext';
 import '../Styles/Carrito.css'
 
+import Loader from '../Components/Loader';
+
 export const Carrito = () => {
-    const { carrito, actualizarCantidad, eliminarProducto } = useCarrito();
-    const handleAumentarCantidad = (productoId) => {
-        actualizarCantidad(productoId, 1);
-    }
-
-    const handleDisminuir = (productoId)=>{
-        const producto = carrito.find((cantidad) => cantidad.idProduct===productoId )
-        if (producto.cantidad>1){
-            actualizarCantidad(productoId,-1)
-        }
-    }
-    const totalCarrito = carrito.reduce(
-        (acc, producto) => acc + producto.priceProduct * producto.cantidad,
-        0
-    );
-
-
-    const handlePurchase = () => {
-        const isConfirmed = window.confirm("¿Deseas finalizar tu compra? ");
-        if (!isConfirmed) {
-            return;
-        }
-
-        fetch('http://localhost:8080/MyMDentalCommerce/Orders/saveNewReserved', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: "include",
-            body: JSON.stringify(carrito)
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-
-    }
+    const {
+        cart,
+        loadingPetition,
+        error,
+        errorBody,
+        addToCart,
+        reduceQuantityFromCart,
+        deleteFromCart,
+        deleteCart,
+        getAllQuantityFromCart,
+        getTotalPriceFromCart,
+        getTotalPriceFromProduct,
+        saveCartInLocalStorage,
+        getCartFromLocalStorage,
+        confirmPurchase,
+    } = useCarrito();
 
      return (
         <div className="cart-container">
+            {loadingPetition && <Loader entity='Peticion de carrito'/>}
+            {error && <p style={{color: 'red'}}>{errorBody?.message || 'Error al procesar la compra'}</p>}
             <h2>Carrito de Compras</h2>
 
-            {carrito.length === 0 ? (
+            {cart.length === 0 ? (
                 <p>Tu carrito está vacío</p>
             ) : (
                 <>
@@ -61,7 +42,7 @@ export const Carrito = () => {
                     </div>
 
                     <ul className="cart-items">
-                        {carrito.map((producto) => {
+                        {cart.map((producto) => {
                             const totalprecio = producto.priceProduct * producto.cantidad;
 
                             return (
@@ -80,26 +61,26 @@ export const Carrito = () => {
                                     <div className="quantity-controls">
                                         <button 
                                             className="quantity-btn"
-                                            onClick={() => handleDisminuir(producto.idProduct)}
+                                            onClick={() => reduceQuantityFromCart(producto)}
                                         >
                                             -
                                         </button>
 
-                                        <span>{producto.cantidad}</span>
+                                        <span>{producto.quantity}</span>
 
                                         <button 
                                             className="quantity-btn"
-                                            onClick={() => handleAumentarCantidad(producto.idProduct)}
+                                            onClick={() => addToCart(producto)}
                                         >
                                             +
                                         </button>
                                     </div>
 
-                                    <p>${totalprecio}</p>
+                                    <p>${getTotalPriceFromProduct(producto)}</p>
 
                                     <button 
                                         className='remove-btn'
-                                        onClick={() => eliminarProducto(producto.idProduct)}
+                                        onClick={() => deleteFromCart(producto)}
                                     >
                                         🗑️
                                     </button>
@@ -114,9 +95,9 @@ export const Carrito = () => {
             <div className="cart-summary">
                 <h3>Resumen Pedido</h3>
                 <p className='total'>
-                    Total del carrito: <strong>${totalCarrito}</strong>
+                    Total del carrito: <strong>${getTotalPriceFromCart()}</strong>
                 </p>
-                <button className='purchase-btn' onClick={handlePurchase} disabled={carrito.length === 0}>
+                <button className='purchase-btn' onClick={() => confirmPurchase()} disabled={cart.length === 0}>
                     Finalizar Compra
                 </button>
             </div>

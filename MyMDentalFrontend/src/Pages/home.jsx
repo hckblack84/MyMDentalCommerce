@@ -7,7 +7,6 @@ import "../Styles/homeStyle.css";
 
 
 export default function Home() {
-    const urlBack = "http://localhost:8080/MyMDentalCommerce/products/adminProducts";
 
     return (
         <>
@@ -54,7 +53,7 @@ export default function Home() {
         </div>
         <h1 className="encabezadoHome"> Algunos de nuestros productos </h1>
 
-        <Productos urlBack={urlBack} />
+        <Productos isFiltered={false} />
 
     </>
     );

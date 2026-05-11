@@ -18,14 +18,14 @@ export default function Navegacion() {
   }, []);
 
   const handleMouseEnter = () => {
-    clearTimeout(timeoutRef.current); // cancela el cierre si el cursor vuelve
+    clearTimeout(timeoutRef.current); 
     setMostrarMenu(true);
   };
 
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setMostrarMenu(false);
-    }, 200); // 200ms de gracia para cruzar al menú
+    }, 200);
   };
 
   return (

@@ -9,7 +9,8 @@ import Categoria from './Pages/Categoria'
 import InicioSesion from './Pages/Inicio_sesion'
 import Detalles from './Components/Detalles'
 import Trabajador from './Pages/Trabajador'
-import { CartProvider } from './Components/CartContext'
+//import { CartProvider } from './Components/CartContext'
+import { CartProvider } from './Context/CartContext'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import  {Carrito} from './Pages/Carrito'
 

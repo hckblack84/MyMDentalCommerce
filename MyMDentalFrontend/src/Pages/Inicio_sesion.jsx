@@ -17,6 +17,7 @@ export default function InicioSesion() {
         headers: {
           'Content-Type': 'application/json'
         },
+        withCredentials: true,
         credentials: "include",
         body: JSON.stringify({ 
           emailUser: correo,  
@@ -32,7 +33,7 @@ export default function InicioSesion() {
       console.log("Respuesta:", data);
 
       localStorage.setItem("role", data.role);
-      navigate('/home');
+      navigate('/');
 
 
       const perfilResponse = await fetch('http://localhost:8080/MyMDentalCommerce/session/perfil', {
