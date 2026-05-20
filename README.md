@@ -19,7 +19,7 @@
 ### 👥 Equipo de Trabajo
 <p align="left">
   <strong>Estudiantes | ROL</strong> <br/>
-  • <strong>Luis Paredes</strong> : - <br/>
+  • <strong>Luis Paredes</strong> : Por definir <br/>
   • <strong></strong> : - <br/>
   • <strong></strong> : -
 </p>
