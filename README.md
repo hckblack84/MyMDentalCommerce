@@ -20,8 +20,8 @@
 <p align="left">
   <strong>Estudiantes | ROL</strong> <br/>
   • <strong>Luis Paredes</strong> : Por definir <br/>
-  • <strong></strong> : - <br/>
-  • <strong></strong> : -
+  • <strong>Antonio Vedia</strong> : - <br/>
+  • <strong>Lucas Olmedo</strong> : -
 </p>
 
 ---
