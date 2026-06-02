@@ -2,6 +2,9 @@ import React from "react";
 import carrosule from "../assets/Imagenes/carrosule.png";
 import carrusel2 from "../assets/Imagenes/carrusel2.png";
 import marca1 from "../assets/Imagenes/marca1.png";
+import marca2 from "../assets/Imagenes/marca2.jpg";
+import marca3 from "../assets/Imagenes/marca3.png";
+import marca4 from "../assets/Imagenes/marca4.png";
 import Productos from "../Components/Productos";
 import "../Styles/homeStyle.css";
 
@@ -40,15 +43,15 @@ export default function Home() {
             </div>
 
             <div className="marcas">
-                <img src={marca1} alt="Marca2"/>
+                <img src={marca2} alt="Marca2"/>
             </div>
 
             <div className="marcas">
-                <img src={marca1} alt="Marca3"/>
+                <img src={marca3} alt="Marca3"/>
             </div>
 
             <div className="marcas">
-                <img src={marca1} alt="Marca4"/>
+                <img src={marca4} alt="Marca4"/>
             </div>
         </div>
         <h1 className="encabezadoHome"> Algunos de nuestros productos </h1>

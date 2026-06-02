@@ -1,6 +1,9 @@
 package com.MyMDentis.MyMDentistComerce.Security;
 
+import com.MyMDentis.MyMDentistComerce.Model.Roles;
 import com.MyMDentis.MyMDentistComerce.Service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,9 +29,18 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Value("${spring.cors.origins.test}")
+    private String testPath;
+    @Value("${spring.cors.origins.cloudfront}")
+    private String cloudfrontPath;
+    @Value("${spring.cors.origins.s3Bucket}")
+    private String s3BucketPath;
+
+
     private final JwtAuthFilter jwtAuthFilter;
     private final CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, CustomUserDetailsService customUserDetailsService){
         this.jwtAuthFilter = jwtAuthFilter;
         this.customUserDetailsService = customUserDetailsService;
@@ -44,17 +56,66 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sess ->
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/MyMDentalCommerce/Orders/saveNewReserved").authenticated()
-                                .anyRequest().
-                                permitAll()).build();
+                .authorizeHttpRequests(auth -> auth
+                        //----------------- SESIÓN Y REGISTRO -----------------
+                        .requestMatchers("/MyMDentalCommerce/session/**"
+                                ,"/MyMDentalCommerce/users/findbyemail/**"
+                        )
+                        .permitAll()
+
+                        //----------------- PRODUCTOS (PÚBLICOS) -----------------
+                        .requestMatchers(
+                                "/MyMDentalCommerce/products/clientProducts/page/**",
+                                "/MyMDentalCommerce/products/getClientProductById/**",
+                                "/MyMDentalCommerce/products/filterClientProductsByPage/**",
+                                "/MyMDentalCommerce/products/getMaxProductPages",
+                                "/MyMDentalCommerce/products/getMaxProductPagesByDepartment/**"
+
+                        ).permitAll()
+
+                        //----------------- PRODUCTOS (TRABAJADOR Y ADMIN) -----------------
+                        .requestMatchers(
+                                "/MyMDentalCommerce/products/adminProducts/page/**",
+                                "/MyMDentalCommerce/products/filterAdminProducts/**",
+                                "/MyMDentalCommerce/products/saveProduct",
+                                "/MyMDentalCommerce/products/editProduct/**"
+                        ).hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
+
+                        //----------------- PRODUCTOS (SOLO ADMIN) -----------------
+                        .requestMatchers("/MyMDentalCommerce/products/deleteProduct/**")
+                        .hasAuthority(Roles.ADMINISTRATOR.name())
+
+                        //----------------- USUARIOS -----------------
+                        .requestMatchers("/MyMDentalCommerce/users/getUsers", "/MyMDentalCommerce/users/adminUpdate/**")
+                        .hasAuthority(Roles.ADMINISTRATOR.name())
+                        .requestMatchers("/MyMDentalCommerce/users/update/**", "/MyMDentalCommerce/users/getUseremail/**", "/MyMDentalCommerce/users/updatePerfil/**")
+                        .authenticated()
+
+                        //----------------- DEPARTAMENTOS -----------------
+                        .requestMatchers("/MyMDentalCommerce/departments/getDepartments").permitAll()
+                        .requestMatchers("/MyMDentalCommerce/departments/createDepartment")
+                        .hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
+
+                        //----------------- RESERVAS -----------------
+                        .requestMatchers(
+                                "/MyMDentalCommerce/Reserved/getAllReserved",
+                                "/MyMDentalCommerce/Reserved/getActiveReserved",
+                                "/MyMDentalCommerce/Reserved/getNoActiveReserved",
+                                "/MyMDentalCommerce/Reserved/getReservedById/**",
+                                "/MyMDentalCommerce/Reserved/getReservedByUser/**",
+                                "/MyMDentalCommerce/Reserved/checkReserved/**"
+                        ).hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
+                        .requestMatchers("/MyMDentalCommerce/Reserved/saveNewReserved")
+                        .authenticated()
+                        .anyRequest().denyAll()
+                ).build();
 
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(testPath, cloudfrontPath, s3BucketPath));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));

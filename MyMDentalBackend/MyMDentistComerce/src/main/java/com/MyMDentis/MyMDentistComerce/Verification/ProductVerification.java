@@ -4,11 +4,24 @@ import com.MyMDentis.MyMDentistComerce.DTO.DTOProductAdmin;
 import com.MyMDentis.MyMDentistComerce.Repository.ProductRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 
+@Service
 @NoArgsConstructor
-public class ProductVerification implements ProductAtributes{
+@Component
+public class ProductVerification {
+
+    private final String PRODUCT_NAME = "Nombre del producto";
+    private final String PRODUCT_CODE = "Codigo del producto";
+    private final String PRODUCT_DESCRIPTION = "Descripcion del producto";
+    private final String PRODUCT_STOCK = "Stock del producto";
+    private final String PRODUCT_CRITIC = "Stock critico del producto";
+    private final String PRODUCT_PRICE = "Precio del producto";
+    private final String PRODUCT_COST_PRICE = "Costo de adquisicion del producto";
+    private final String PRODUCT_DEPARTMENT = "Departamento del producto";
 
     String patternCode = "^[0-9:\\-]+( [0-9:\\-]+)*$";
     @Autowired
@@ -48,36 +61,36 @@ public class ProductVerification implements ProductAtributes{
     }
 
     public boolean validPriceCorrelation(DTOProductAdmin dtoProductAdmin){
-        return dtoProductAdmin.getPriceProduct() >= dtoProductAdmin.getCostPriceProduct();
+        return dtoProductAdmin.getPriceProduct() < dtoProductAdmin.getCostPriceProduct();
     }
 
     public boolean validStockCorrelation(DTOProductAdmin dtoProductAdmin){
-        return dtoProductAdmin.getStockProduct() > dtoProductAdmin.getCriticProduct();
+        return dtoProductAdmin.getStockProduct() <= dtoProductAdmin.getCriticProduct();
     }
 
-    public boolean nullVerification(DTOProductAdmin dtoProductAdmin){
+    public String nullVerification(DTOProductAdmin dtoProductAdmin){
         if (nullProductCode(dtoProductAdmin.getCodeProduct())){
-            return true;
+            return PRODUCT_CODE;
         }
         if (nullProductName(dtoProductAdmin.getProductName())){
-            return true;
+            return PRODUCT_NAME;
         }
         if (nullProductStock(dtoProductAdmin.getStockProduct())){
-            return true;
+            return PRODUCT_STOCK;
         }
         if (nullProductCritic(dtoProductAdmin.getCriticProduct())){
-            return true;
+            return PRODUCT_CRITIC;
         }
         if (nullProductPrice(dtoProductAdmin.getPriceProduct())){
-            return true;
+            return PRODUCT_PRICE;
         }
         if (nullProductCostPrice(dtoProductAdmin.getCostPriceProduct())){
-            return true;
+            return PRODUCT_COST_PRICE;
         }
         if (nullProductNameDepartment(dtoProductAdmin.getNameDepartment())){
-            return true;
+            return PRODUCT_DEPARTMENT;
         }
-        return false;
+        return null;
     }
 
     //Basic validations

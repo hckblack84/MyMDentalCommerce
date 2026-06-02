@@ -4,4 +4,14 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+
+  server: {
+    proxy: {
+      '/MyMDentalCommerce': {
+        target: 'http://54.88.96.49:8080',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  }
 })

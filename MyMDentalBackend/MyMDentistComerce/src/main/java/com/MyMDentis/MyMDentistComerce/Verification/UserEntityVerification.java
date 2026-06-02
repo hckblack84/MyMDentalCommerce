@@ -6,37 +6,76 @@ import com.MyMDentis.MyMDentistComerce.Model.Roles;
 
 import java.util.regex.Pattern;
 
-public class UserEntityVerification implements UserEntityAtributes{
+public class UserEntityVerification {
 
     private final String patternName = "^[a-zA-ZÀ-ÿ]+$";
 
-    public boolean validNullsUserEntity(DTOUserEntity dtoUserEntity){
-        return nullNameUser(dtoUserEntity.getNameUser()) ||
-                nullSurnameUser(dtoUserEntity.getSurnameUser()) ||
-                nullEmailUser(dtoUserEntity.getEmailUser()) ||
-                nullPasswordUser(dtoUserEntity.getPasswordUser()) ||
-                nullCellphoneUser(dtoUserEntity.getCellphoneUser()) ||
-                nullRoleUser(dtoUserEntity.getRole());
+    final String NAME_USER = "Nombre del usuario";
+    final String SURNAME_USER = "Apellido del usuario";
+    final String EMAIL_USER = "Correo electronico del usuario";
+    final String PASSWORD_USER = "Contraseña del usuario";
+    final String CELLPHONE_USER = "Telefono/Celular del usuario";
+    final String ROLE_USER = "Rol del usuario";
+
+    public String nullCreateUser(DTOUserEntity dtoUserEntity) {
+        if (nullNameUser(dtoUserEntity.getNameUser())) {
+            return NAME_USER;
+        }
+        if (nullSurnameUser(dtoUserEntity.getSurnameUser())) {
+            return SURNAME_USER;
+        }
+        if (nullEmailUser(dtoUserEntity.getEmailUser())) {
+            return EMAIL_USER;
+        }
+        if (nullPasswordUser(dtoUserEntity.getPasswordUser())) {
+            return PASSWORD_USER;
+        }
+        if (nullRoleUser(dtoUserEntity.getRole())) {
+            return ROLE_USER;
+        }
+        return null;
     }
 
-    public boolean validNullsCredentials(DTOCredentials dtoCredentials){
-        return nullEmailUser(dtoCredentials.getEmailUser()) || nullPasswordUser(dtoCredentials.getPassword());
+    public String nullCreateDefaultUser(DTOUserEntity dtoUserEntity){
+        if (nullNameUser(dtoUserEntity.getNameUser())) {
+            return NAME_USER;
+        }
+        if (nullSurnameUser(dtoUserEntity.getSurnameUser())) {
+            return SURNAME_USER;
+        }
+        if (nullEmailUser(dtoUserEntity.getEmailUser())) {
+            return EMAIL_USER;
+        }
+        if (nullPasswordUser(dtoUserEntity.getPasswordUser())) {
+            return PASSWORD_USER;
+        }
+        return null;
+    }
+
+    public String nullCredentials(DTOCredentials dtoCredentials){
+        if (nullEmailUser(dtoCredentials.getEmailUser())){
+            return EMAIL_USER;
+        }
+        if (nullPasswordUser(dtoCredentials.getPassword())){
+            return PASSWORD_USER;
+        }
+        return null;
     }
 
     public String validUserEntityValues(DTOUserEntity dtoUserEntity){
-        if (!validNameUser(dtoUserEntity.getNameUser())){
+        if (invalidNameUser(dtoUserEntity.getNameUser())){
             return NAME_USER;
         }
-        if (!validSurnameUser(dtoUserEntity.getSurnameUser())){
+        if (invalidSurnameUser(dtoUserEntity.getSurnameUser())){
             return SURNAME_USER;
         }
-        if (!validEmailUser(dtoUserEntity.getEmailUser())){
+        if (invalidEmailUser(dtoUserEntity.getEmailUser())){
             return EMAIL_USER;
         }
-        if (!validPasswordUser(dtoUserEntity.getPasswordUser())){
+        if (invalidPasswordUser(dtoUserEntity.getPasswordUser())){
             return PASSWORD_USER;
         }
-        if (!validCellphoneUser(dtoUserEntity.getCellphoneUser())){
+        if (invalidCellphoneUser(dtoUserEntity.getCellphoneUser())){
             return CELLPHONE_USER;
         }
         if (!validRoleUser(dtoUserEntity.getRole())){
@@ -45,11 +84,30 @@ public class UserEntityVerification implements UserEntityAtributes{
         return null;
     }
 
-    public String validCredentialsValues(DTOCredentials dtoCredentials){
-        if (!validEmailUser(dtoCredentials.getEmailUser())){
+    public String validDefaultUserEntityValues(DTOUserEntity dtoUserEntity){
+        if (invalidNameUser(dtoUserEntity.getNameUser())){
+            return NAME_USER;
+        }
+        if (invalidSurnameUser(dtoUserEntity.getSurnameUser())){
+            return SURNAME_USER;
+        }
+        if (invalidEmailUser(dtoUserEntity.getEmailUser())){
             return EMAIL_USER;
         }
-        if (!validPasswordUser(dtoCredentials.getPassword())){
+        if (invalidPasswordUser(dtoUserEntity.getPasswordUser())){
+            return PASSWORD_USER;
+        }
+        if (invalidCellphoneUser(dtoUserEntity.getCellphoneUser())){
+            return CELLPHONE_USER;
+        }
+        return null;
+    }
+
+    public String validCredentialsValues(DTOCredentials dtoCredentials){
+        if (invalidEmailUser(dtoCredentials.getEmailUser())){
+            return EMAIL_USER;
+        }
+        if (invalidPasswordUser(dtoCredentials.getPassword())){
             return PASSWORD_USER;
         }
         return null;
@@ -57,35 +115,37 @@ public class UserEntityVerification implements UserEntityAtributes{
 
     //basic validations
 
-    public boolean validNameUser(String nameUser){
-        return nameUser.trim().length() <= 25 &&
-                nameUser.trim().length() > 3 &&
-                Pattern.compile(patternName).matcher(nameUser).matches();
+    public boolean invalidNameUser(String nameUser){
+        return nameUser.trim().length() > 25 ||
+                nameUser.trim().length() <= 3 ||
+                !Pattern.compile(patternName).matcher(nameUser).matches();
     }
 
-    public boolean validSurnameUser(String surnameUser){
-        return surnameUser.trim().length() <= 25 &&
-                surnameUser.trim().length() > 3 &&
-                Pattern.compile(patternName).matcher(surnameUser).matches();
+    public boolean invalidSurnameUser(String surnameUser){
+        return surnameUser.trim().length() > 25 ||
+                surnameUser.trim().length() <= 3 ||
+                !Pattern.compile(patternName).matcher(surnameUser).matches();
     }
 
-    public boolean validEmailUser(String emailUser){
+    public boolean invalidEmailUser(String emailUser){
         String patternEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return emailUser.trim().length() > 5 &&
-                emailUser.trim().length() <= 100 &&
-                Pattern.compile(patternEmail).matcher(emailUser).matches();
+        return emailUser.trim().length() <= 5 ||
+                emailUser.trim().length() > 100 ||
+                !Pattern.compile(patternEmail).matcher(emailUser).matches();
     }
 
-    public boolean validPasswordUser(String passwordUser){
-        return passwordUser.trim().length() >= 8 &&
-                passwordUser.trim().length() <= 15;
+    public boolean invalidPasswordUser(String passwordUser){
+        return passwordUser.trim().length() < 8 ||
+                passwordUser.trim().length() > 15;
     }
 
-    public boolean validCellphoneUser(Long cellphoneUser){
-        return Long.toString(cellphoneUser).trim().length() == 9;
+    public boolean invalidCellphoneUser(Long cellphoneUser){
+        if (cellphoneUser == null) return false; // si es nulo, se considera valido porque no es un campo obligatorio si en nullCreateUser no se pide. Si fuera obligatorio, se validaria en nullCreateUser. Pero devolvemos false (no es invalido) para evitar el NullPointerException. Si es obligatorio, se devuelve true. Suponiendo que es opcional:
+        return Long.toString(cellphoneUser).trim().length() != 9;
     }
 
     public boolean validRoleUser(Roles roleUser){
+        if (roleUser == null) return false;
         for (Roles role : Roles.values()){
             if (role.name().equalsIgnoreCase(roleUser.name())){
                 return true;
@@ -99,7 +159,6 @@ public class UserEntityVerification implements UserEntityAtributes{
     public boolean nullNameUser(String nameUser){
         return nameUser == null || nameUser.trim().isEmpty();
     }
-
     public boolean nullSurnameUser(String surnameUser){
         return surnameUser == null || surnameUser.trim().isEmpty();
     }

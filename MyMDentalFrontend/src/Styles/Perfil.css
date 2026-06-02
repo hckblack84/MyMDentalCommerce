@@ -1,0 +1,249 @@
+/* =============================================
+   PALETA MYM
+   Fondo:      #F8F9FA
+   Acento:     #00C2CB
+   Texto:      #2D3436
+   CTA/Oferta: #FF007F
+   ============================================= */
+
+/* =============================================
+   TOKENS
+   ============================================= */
+:root {
+  --mym-bg:        #F8F9FA;
+  --mym-surface:   #FFFFFF;
+  --mym-accent:    #00C2CB;
+  --mym-accent-dk: #009BA3;
+  --mym-accent-lt: #E0F9FA;
+  --mym-cta:       #FF007F;
+  --mym-text:      #2D3436;
+  --mym-muted:     #636E72;
+  --mym-border:    #EAEAEA;
+  --mym-shadow-sm: 0 1px 4px rgba(0, 194, 203, 0.06);
+  --mym-shadow-md: 0 4px 16px rgba(0, 194, 203, 0.12);
+  --mym-shadow-lg: 0 8px 32px rgba(0, 194, 203, 0.18);
+  --mym-radius-sm: 8px;
+  --mym-radius-md: 12px;
+  --mym-radius-lg: 16px;
+  --mym-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================
+   CONTENEDOR PRINCIPAL
+   ============================================= */
+.container {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* =============================================
+   TÍTULO
+   ============================================= */
+.title,
+.tittle {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--mym-text);
+  margin: 40px 0 28px;
+  padding-bottom: 14px;
+  position: relative;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.title::after,
+.tittle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--mym-accent), var(--mym-cta));
+  border-radius: 99px;
+}
+
+/* =============================================
+   TARJETA DE FORMULARIO
+   ============================================= */
+.container-form {
+  background: var(--mym-surface);
+  border-radius: var(--mym-radius-lg);
+  border: 1px solid var(--mym-border);
+  box-shadow: var(--mym-shadow-sm);
+  padding: 0 28px;
+  margin-bottom: 0;
+  overflow: hidden;
+  transition: box-shadow var(--mym-transition), border-color var(--mym-transition);
+}
+
+.container-form:hover {
+  box-shadow: var(--mym-shadow-md);
+  border-color: rgba(0, 194, 203, 0.25);
+}
+
+/* =============================================
+   FILA DE CAMPO
+   ============================================= */
+.container-form-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--mym-border);
+  gap: 16px;
+  transition: background var(--mym-transition);
+  margin: 0 -28px;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.container-form-left:last-of-type {
+  border-bottom: none;
+}
+
+.container-form-left:hover {
+  background: var(--mym-accent-lt);
+}
+
+/* Etiqueta (label) */
+.container-form-left p:first-child {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mym-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+/* Valor */
+.container-form-left p:last-child {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--mym-text);
+  margin: 0;
+  text-align: right;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* =============================================
+   BOTÓN EDITAR
+   ============================================= */
+.container button,
+button.btn-editar {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 28px auto 48px;
+  padding: 14px 24px;
+  background: var(--mym-accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--mym-radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--mym-transition),
+    transform var(--mym-transition),
+    box-shadow var(--mym-transition);
+}
+
+/* Efecto shimmer al hover */
+.container button::before,
+button.btn-editar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.container button:hover::before,
+button.btn-editar:hover::before {
+  transform: translateX(100%);
+}
+
+.container button:hover,
+button.btn-editar:hover {
+  background: var(--mym-accent-dk);
+  transform: translateY(-2px);
+  box-shadow: var(--mym-shadow-lg);
+}
+
+.container button:active,
+button.btn-editar:active {
+  transform: translateY(0);
+  box-shadow: var(--mym-shadow-sm);
+}
+
+.container button:focus-visible,
+button.btn-editar:focus-visible {
+  outline: 3px solid rgba(0, 194, 203, 0.45);
+  outline-offset: 2px;
+}
+
+/* =============================================
+   ESTADOS DE CARGA / ERROR
+   ============================================= */
+.perfil-loading,
+.perfil-error {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--mym-muted);
+  font-size: 15px;
+}
+
+.perfil-error {
+  color: #FF007F;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 640px) {
+  .title,
+  .tittle {
+    font-size: 22px;
+    margin: 28px 0 20px;
+  }
+
+  .container-form {
+    border-radius: var(--mym-radius-md);
+    padding: 0 20px;
+  }
+
+  .container-form-left {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 20px;
+    margin: 0 -20px;
+    gap: 4px;
+  }
+
+  .container-form-left p:last-child {
+    text-align: left;
+    font-size: 16px;
+  }
+
+  .container button,
+  button.btn-editar {
+    max-width: 100%;
+    margin: 20px 0 36px;
+  }
+}

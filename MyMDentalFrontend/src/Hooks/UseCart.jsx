@@ -14,6 +14,11 @@ export const useCart = () => {
     }
     const existingProduct = cart.find((item) => item.idProduct === product.idProduct);
     if (existingProduct) {
+      const nuevaCantidad = existingProduct.quantity + 1;
+      if (nuevaCantidad > product.stockProduct) {
+        alert("No hay más stock disponible");
+        return;
+      }
       setCart(
         cart.map((item) =>
           item.idProduct === product.idProduct
@@ -72,14 +77,84 @@ export const useCart = () => {
   };
 
   const confirmPurchase = async () => {
-    setLoadingPetition(true);
-    setError(false);
-    setErrorBody(null);
+    if (cart.length === 0) {
+    alert("El carrito está vacío");
+    return;
+  }
 
-    const carritoBack = cart.map((producto) => ({
-      idProduct: producto.idProduct,
-      quantityReserved: producto.quantity,
-    }));
+  const isConfirmed = window.confirm(
+    "¿Deseas finalizar tu compra?"
+  );
+
+  if (!isConfirmed) return;
+
+  setLoadingPetition(true);
+  setError(false);
+  setErrorBody(null);
+
+  const carritoBack = cart.map((producto) => ({
+    idProduct: producto.idProduct,
+    quantityReserved: producto.quantity,
+  }));
+
+  try {
+
+    // guardar reserva
+    const reservedResponse = await saveNewReserved(carritoBack);
+
+    // obtener código reserva
+    const idReserved = reservedResponse[0].idReserved;
+
+    // mensaje whatsapp
+    let message = ' Nuevo pedido:%0A%0A';
+
+    message += ` Código Reserva: ${idReserved}%0A%0A`;
+
+    cart.forEach((producto) => {
+
+      message += ` Producto: ${producto.productName}%0A`;
+      message += ` Cantidad: ${producto.quantity}%0A`;
+      message += ` Precio unitario: $${producto.priceProduct}%0A`;
+      message += `Subtotal: $${producto.priceProduct * producto.quantity}%0A%0A`;
+
+    });
+
+    const total = getTotalPriceFromCart();
+
+    message += ` TOTAL PEDIDO: $${total}`;
+
+    // WhatsApp
+    const phoneNumber = '56971536489';
+
+    const whatsappUrl =
+      `https://wa.me/${phoneNumber}?text=${message}`;
+
+    window.open(whatsappUrl, '_blank');
+
+    // limpiar carrito
+    setCart([]);
+
+    localStorage.removeItem('cart');
+
+    alert("Pedido realizado correctamente");
+
+  } catch (e) {
+
+    setError(true);
+
+    setErrorBody(
+      e.body ?? {
+        code: e.code ?? e.status,
+        message: e.message,
+      }
+    );
+
+  } finally {
+
+    setLoadingPetition(false);
+
+  }
+
 
     
     const response = saveNewReserved(carritoBack);

@@ -22,7 +22,7 @@ public class CookieService {
     public void deleteCookie(String username, HttpServletResponse response) {
         Cookie cookie=new Cookie(username, null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        //cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge(0);
 

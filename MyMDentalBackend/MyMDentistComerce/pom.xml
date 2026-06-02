@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.5</version>
+		<version>4.0.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.MyMDentis</groupId>
-	<artifactId>MyMDentistComerce</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<artifactId>mym_dental_commerce</artifactId>
+	<version>0.0.1</version>
+	<name>mym_dental_commerce</name>
+	<description>Spring Proyect</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -101,6 +101,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Amazon dependence -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<version>2.20.162</version> <!-- Verifica la versión más reciente -->
+		</dependency>
 	</dependencies>
 
 	<build>

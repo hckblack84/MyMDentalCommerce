@@ -1,7 +1,5 @@
 package com.MyMDentis.MyMDentistComerce.Exception;
 
-import javax.print.DocFlavor;
-
 public interface ExceptionValues {
 
     String UNKNOWN_EXCEPTION_CODE = "?-001";
@@ -31,6 +29,9 @@ public interface ExceptionValues {
     String CODE_PRODUCT_ALREADY_EXIST_CODE = "P-008";
     String CODE_PRODUCT_ALREADY_EXIST_MESSAGE = "Codigo del producto ya existe en el sistema";
 
+    String INDEX_PAGE_INVALID_CODE = "P-009";
+    String INDEX_PAGE_INVALID_MESSAGE = "Index de pagina de productos invalido";
+
     String PRODUCT_NOT_FOUND_CODE = "E-001";
     String PRODUCT_NOT_FOUND_MESSAGE = "Producto no encontrado";
 
@@ -55,7 +56,12 @@ public interface ExceptionValues {
     String VALUES_NOT_COMPATIBLE_REQUEST_CODE = "R-001";
     String VALUES_NOT_COMPATIBLE_REQUEST_MESSAGE = "Valores de la peticion no compatibles con la entrada";
 
-    String INVALID_STOCK_REQUEST_CODE = "R-001";
+    String INVALID_STOCK_REQUEST_CODE = "S-001";
     String INVALID_STOCK_REQUEST_MESSAGE = "No se puede pedir mas stock de la que existe";
 
+    String RESERVED_NOT_FOUND_CODE = "R-001";
+    String RESERVED_NOT_FOUND_MESSAGE = "Reserva buscada no fue encontrado en el apartado de reservas";
+
+    String INVALID_IMAGE_EXTENSION_CODE = "P-010";
+    String INVALID_IMAGE_EXTENSION_MESSAGE = "Extension de archivo no permitido. Solo usar .jpg-.jpeg-.png-.svg";
 }

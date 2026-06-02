@@ -2,6 +2,7 @@ package com.MyMDentis.MyMDentistComerce.Service;
 
 import com.MyMDentis.MyMDentistComerce.DTO.DTOReserved;
 import com.MyMDentis.MyMDentistComerce.DTO.DTOReservedPetition;
+import com.MyMDentis.MyMDentistComerce.DTO.DTOUserEntity;
 import com.MyMDentis.MyMDentistComerce.Exception.ExceptionValues;
 import com.MyMDentis.MyMDentistComerce.Exception.InvalidValuesEntityException;
 import com.MyMDentis.MyMDentistComerce.Exception.NotFoundEntityException;
@@ -36,30 +37,51 @@ public class ReservedService {
     @Autowired
     private ProductRepository productRepository;
 
+    private final DTOReserved dtoReserved = new DTOReserved();
 
-    public List<Reserved> getAllOrders(){
-        return reservedRepository.findAll();
+
+    public List<DTOReserved> getAllOrders(){
+        return dtoReserved.parseDTOOrderList(reservedRepository.findAll());
     }
 
-    public Reserved findOrderById(Long id){
-        return reservedRepository.findById(id).orElseThrow(() -> new RuntimeException("xd"));
+    public DTOReserved findOrderById(Long id){
+
+        if (id < 0){
+            throw new InvalidValuesEntityException(ExceptionValues.INVALID_VALUES_EXCEPTION_CODE, Entities.RESERVED, ExceptionValues.INVALID_VALUES_EXCEPTION_MESSAGE);
+        }
+
+        return dtoReserved.parseDTOOrder(reservedRepository.findById(id).orElseThrow(
+                () -> new NotFoundEntityException(ExceptionValues.RESERVED_NOT_FOUND_CODE, Entities.RESERVED, ExceptionValues.RESERVED_NOT_FOUND_MESSAGE)
+        ));
     }
 
-    public List<Reserved> findByUser(Long idUserEntity){
+    public List<DTOReserved> findByUser(Long idUserEntity){
 
         UserEntity user = userEntityRepository.findById(idUserEntity).orElseThrow(
-                () -> new RuntimeException("xd1")
+                () -> new NotFoundEntityException(ExceptionValues.USER_NOT_FOUND_CODE, Entities.USER_ENTITY, ExceptionValues.USER_NOT_FOUND_MESSAGE)
         );
-
-        return reservedRepository.findByUserEntity(user);
+        return dtoReserved.parseDTOOrderList(reservedRepository.findByUserEntity(user));
     }
 
-    public List<Reserved> findActivesOrders(){
-        return reservedRepository.findByActiveReserved(true);
+    public List<DTOReserved> findActivesOrders(){
+        return dtoReserved.parseDTOOrderList(reservedRepository.findByActiveReserved(true));
     }
 
-    public List<Reserved> findNoActivesOrders(){
-        return reservedRepository.findByActiveReserved(false);
+    public List<DTOReserved> findNoActivesOrders(){
+        return dtoReserved.parseDTOOrderList(reservedRepository.findByActiveReserved(false));
+    }
+
+    @Transactional
+    public boolean checkReserved(Long idReserved) {
+
+        Reserved reserved = reservedRepository.findById(idReserved)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        reserved.setActiveReserved(false);
+
+        reservedRepository.save(reserved);
+
+        return true;
     }
 
     @Transactional
@@ -118,6 +140,7 @@ public class ReservedService {
         }else{
             throw new NullValuesEntityException(
                     ExceptionValues.NOT_USER_CREDENTIALS_CODE,
+                    Entities.USER_ENTITY,
                     ExceptionValues.NOT_USER_CREDENTIALS_MESSAGE
             );
         }

@@ -19,9 +19,9 @@
 ### 👥 Equipo de Trabajo
 <p align="left">
   <strong>Estudiantes | ROL</strong> <br/>
-  • <strong>Luis Paredes</strong> : Por definir <br/>
-  • <strong>Antonio Vedia</strong> : - <br/>
-  • <strong>Lucas Olmedo</strong> : -
+  • <strong>Luis Paredes</strong> : Product Owner <br/>
+  • <strong>Antonio Vedia</strong> : -Scrum master <br/>
+  • <strong>Lucas Olmedo</strong> : - Development teams <br/>
 </p>
 
 ---

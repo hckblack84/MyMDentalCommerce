@@ -7,9 +7,11 @@ import lombok.Setter;
 public class NullValuesEntityException extends RuntimeException {
 
     private String code;
+    private String nullAttribute;
 
-    public NullValuesEntityException(String codeException, String message) {
+    public NullValuesEntityException(String codeException, String nullAttribute, String message) {
         super(message);
+        this.nullAttribute = nullAttribute;
         this.code = codeException;
     }
 

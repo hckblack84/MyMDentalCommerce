@@ -6,4 +6,5 @@ public interface Entities {
     String PRODUCT = "Producto";
     String USER_ENTITY = "Usuario";
     String REQUEST = "Peticion";
+    String RESERVED = "Reserva";
 }

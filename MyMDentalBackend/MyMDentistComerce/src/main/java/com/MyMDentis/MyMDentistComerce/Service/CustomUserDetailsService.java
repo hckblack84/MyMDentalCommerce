@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.withUsername(userEntity.getEmailUser())
                 .password(userEntity.getPasswordUser())
                 .authorities(Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().name())
+                        new SimpleGrantedAuthority(userEntity.getRole().name())
                 ))
                 .build();
     }
@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.withUsername(user.getEmailUser())
                 .password(user.getPasswordUser())
                 .authorities(Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+                        new SimpleGrantedAuthority(user.getRole().name())
                 ))
                 .build();
     }

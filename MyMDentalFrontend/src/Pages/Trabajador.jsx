@@ -1,217 +1,602 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import '../Styles/Administrador.css';
 
-export default function Trabajador() {
+const API_PRODUCTS = import.meta.env.VITE_API_PRODUCTS;
+const API_DEPARTMENTS = import.meta.env.VITE_API_DEPARTMENTS;
+const API_USERS = import.meta.env.VITE_API_GetUsers;
+const API_USER_REGISTER = import.meta.env.VITE_API_USER_REGISTER;
 
-  const [codeProduct, setCodeProduct] = useState("");
-  const [productName, setProductName] = useState("");
-  const [priceProduct, setPriceProduct] = useState("");
-  const [costPriceProduct, setCostPriceProduct] = useState("");
-  const [stockProduct, setStockProduct] = useState("");
-  const [criticProduct, setCriticProduct] = useState("");
-  const [descriptionProduct, setDescriptionProduct] = useState("");
-  const [nameDepartment, setNameDepartment] = useState("");
+const INITIAL_PRODUCT = {
+  codeProduct: "",
+  productName: "",
+  priceProduct: "",
+  costPriceProduct: "",
+  stockProduct: "",
+  criticProduct: "",
+  descriptionProduct: "",
+  nameDepartment: "",
+  imageProduct: "",
+};
+
+const INITIAL_USER = {
+  nameUser: "",
+  surnameUser: "",
+  emailUser: "",
+  passwordUser: "",
+  cellphoneUser: "",
+  role: "CLIENT",
+};
+
+const ROLES = ["CLIENT"];
+
+const PRODUCT_TABS = [
+  { id: "registrar", label: "Registrar" },
+  { id: "actualizar", label: "Actualizar" },
+];
+
+const USER_TABS = [
+  { id: "registrar", label: "Registrar" },
+  { id: "actualizar", label: "Actualizar" },
+  { id: "listar", label: "Listar" },
+];
+
+function Field({ label, type = "text", value, onChange, placeholder, required, full, options }) {
+  const Tag = type === "textarea" ? "textarea" : type === "select" ? "select" : "input";
+  return (
+    <div className={`field-container ${full ? "field-full-width" : ""}`}>
+      <label className="field-label">{label}</label>
+      {Tag === "select" ? (
+        <select className="field-input" value={value} onChange={onChange} required={required}>
+          <option value="">-- Seleccionar --</option>
+          {options?.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      ) : (
+        <Tag
+          type={type !== "textarea" && type !== "select" ? type : undefined}
+          className={`field-input ${type === "textarea" ? "field-textarea" : ""}`}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+        />
+      )}
+    </div>
+  );
+}
+
+function PrimaryButton({ children, onClick, disabled }) {
+  return (
+    <button className="primary-button" onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
+  );
+}
+
+export default function Administrador() {
+  const [section, setSection] = useState("productos");
+  const [activeTab, setActiveTab] = useState("registrar");
+  const [departments, setDepartments] = useState([]);
+  const [feedback, setFeedback] = useState(null);
+
+  // Product state
+  const [product, setProduct] = useState({ ...INITIAL_PRODUCT });
+  const [updateProduct, setUpdateProduct] = useState({ ...INITIAL_PRODUCT });
+  const [deleteProductName, setDeleteProductName] = useState("");
+  const [productList, setProductList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+
+  // User state
+  const [user, setUser] = useState({ ...INITIAL_USER });
+  const [updateUser, setUpdateUser] = useState({ ...INITIAL_USER });
+  const [deleteUserEmail, setDeleteUserEmail] = useState("");
+  const [usersList, setUsersList] = useState([]);
+
+  useEffect(() => {
+    fetch(API_DEPARTMENTS)
+      .then(res => res.json())
+      .then(data => setDepartments(data))
+      .catch(() => console.error("Error cargando departamentos"));
+  }, []);
+
+  const showFeedback = (msg, type) => {
+    setFeedback({ msg, type });
+    setTimeout(() => setFeedback(null), 4000);
+  };
+
+  const depOptions = departments.map(d => ({
+    value: d.nameDepartment,
+    label: d.nameDepartment,
+  }));
+
+  const setField = (setter) => (key) => (e) =>
+    setter((prev) => ({ ...prev, [key]: e.target.value }));
 
 
-  const [updateProductName, setUpdateProductName] = useState("");
-  const [updateCodeProduct, setUpdateCodeProduct] = useState("");
-  const [updatePriceProduct, setUpdatePriceProduct] = useState("");
-  const [updateCostPriceProduct, setUpdateCostPriceProduct] = useState("");
-  const [updateStockProduct, setUpdateStockProduct] = useState("");
-  const [updateCriticProduct, setUpdateCriticProduct] = useState("");
-  const [updateDescriptionProduct, setUpdateDescriptionProduct] = useState("");
-  const [updateNameDepartment, setUpdateNameDepartment] = useState("");
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const nuevoProducto = {
-      codeProduct,
-      productName,
-      priceProduct,
-      costPriceProduct,
-      stockProduct,
-      criticProduct,
-      descriptionProduct,
-      nameDepartment
+  // ── NEW: Image Upload Component ──────────────────────────────────────────────
+  function ImageUpload({ label = "Imagen del producto", value, onChange, full }) {
+    const inputRef = useRef(null);
+  
+    const handleFile = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => onChange(ev.target.result);
+      reader.readAsDataURL(file);
     };
+  
+    const handleDrop = (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => onChange(ev.target.result);
+      reader.readAsDataURL(file);
+    };
+  
+    const handleDragOver = (e) => e.preventDefault();
+  
+    const handleRemove = (e) => {
+      e.stopPropagation();
+      onChange("");
+      if (inputRef.current) inputRef.current.value = "";
+    };
+  
+    return (
+      <div className={`field-container ${full ? "field-full-width" : ""}`}>
+        <label className="field-label">{label}</label>
+        <div
+          className={`image-upload-zone ${value ? "has-image" : ""}`}
+          onClick={() => !value && inputRef.current?.click()}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          {value ? (
+            <div className="image-upload-preview">
+              <img src={value} alt="Vista previa" className="image-preview-img" />
+              <div className="image-upload-overlay">
+                <button
+                  type="button"
+                  className="image-change-btn"
+                  onClick={() => inputRef.current?.click()}
+                >
+                  Cambiar imagen
+                </button>
+                <button
+                  type="button"
+                  className="image-remove-btn"
+                  onClick={handleRemove}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="image-upload-placeholder">
+             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p className="image-upload-text">Arrastra una imagen o haz clic para seleccionar</p>
+              <p className="image-upload-hint">PNG, JPG, WEBP — máx. 5 MB</p>
+            </div>
+          )}
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFile}
+          />
+        </div>
+      </div>
+    );
+  }
 
-    fetch("http://localhost:8080/MyMDentalCommerce/products/saveProduct", {
-      method: 'POST',
-      headers:{
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(nuevoProducto)
+  // Product handlers
+  const handleRegistrarProducto = () => {
+    fetch(`${API_PRODUCTS}/saveProduct`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(product),
     })
-    .then(response => {
-      if(response.ok){
-        alert("Producto registrado exitosamente");
-      } else {
-        alert("Error al registrar el producto");
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("Error de conexión con el servidor");
-    });
-  };
-
-  const actualizarProducto = (e) => {
-    e.preventDefault();
-    fetch(`http://localhost:8080/MyMDentalCommerce/products/editProduct/${updateProductName}`,{
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        codeProduct: updateCodeProduct,
-        productName: updateProductName,
-        priceProduct: updatePriceProduct,
-        costPriceProduct: updateCostPriceProduct,
-        stockProduct: updateStockProduct,
-        criticProduct: updateCriticProduct,
-        descriptionProduct: updateDescriptionProduct,
-        nameDepartment: updateNameDepartment
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Producto registrado exitosamente", "success");
+          setProduct({ ...INITIAL_PRODUCT });
+        } else {
+          showFeedback("Error al registrar el producto", "error");
+        }
       })
-
-    })
-    .then(response => {
-      if(response.ok){
-        alert("Producto actualizado exitosamente");
-      } else {
-        alert("Error al actualizar el producto");
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("Error de conexión con el servidor");
-    });
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
   };
+
+  const handleActualizarProducto = () => {
+    fetch(`${API_PRODUCTS}/editProduct/${updateProduct.productName}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updateProduct),
+    })
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Producto actualizado exitosamente", "success");
+          setUpdateProduct({ ...INITIAL_PRODUCT });
+          fetchProductList();
+        } else {
+          showFeedback("Error al actualizar el producto", "error");
+        }
+      })
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+  };
+
+  const handleEliminarProducto = () => {
+    if (!deleteProductName) return showFeedback("Ingresa el nombre del producto.", "error");
+    fetch(`${API_PRODUCTS}/deleteProduct/${deleteProductName}`, { method: "DELETE" })
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Producto eliminado exitosamente", "success");
+          setDeleteProductName("");
+        } else {
+          showFeedback("Error al eliminar el producto", "error");
+        }
+      })
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+  };
+
+  const fetchProductList = () => {
+    fetch(`${API_PRODUCTS}/getProducts`)
+      .then(res => res.json())
+      .then(data => setProductList(data))
+      .catch(() => showFeedback("Error al cargar productos", "error"));
+  };
+
+  // User handlers
+  const handleRegistrarUsuario = () => {
+    fetch(API_USER_REGISTER, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    })
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Usuario registrado exitosamente", "success");
+          setUser({ ...INITIAL_USER });
+        } else {
+          showFeedback("Error al registrar el usuario", "error");
+        }
+      })
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+  };
+
+  const handleActualizarUsuario = () => {
+    fetch(`${API_USERS}/updateUser/${updateUser.emailUser}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updateUser),
+    })
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Usuario actualizado exitosamente", "success");
+          setUpdateUser({ ...INITIAL_USER });
+        } else {
+          showFeedback("Error al actualizar el usuario", "error");
+        }
+      })
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+  };
+
+  const handleEliminarUsuario = () => {
+    if (!deleteUserEmail) return showFeedback("Ingresa el email del usuario.", "error");
+    fetch(`${API_USERS}/deleteUser/${deleteUserEmail}`, { method: "DELETE" })
+      .then(res => {
+        if (res.ok) {
+          showFeedback("Usuario eliminado exitosamente", "success");
+          setDeleteUserEmail("");
+        } else {
+          showFeedback("Error al eliminar el usuario", "error");
+        }
+      })
+      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+  };
+
+  const handleListarUsuarios = () => {
+    fetch(API_USERS)
+      .then(res => res.json())
+      .then(data => setUsersList(data))
+      .catch(() => showFeedback("Error al cargar usuarios", "error"));
+  };
+
+  useEffect(() => {
+    if (section === "usuarios" && activeTab === "listar") {
+      handleListarUsuarios();
+    }
+  }, [section, activeTab]);
+
+  useEffect(() => {
+    if (section === "productos" && activeTab === "actualizar") {
+      fetchProductList();
+    }
+  }, [section, activeTab]);
+
+  const pf = setField(setProduct);
+  const pu = setField(setUpdateProduct);
+  const uf = setField(setUser);
+  const uu = setField(setUpdateUser);
+
+  const filteredProducts = productList.filter(p => {
+    const name = (p.productName || "").toLowerCase();
+    const matchesName = name.includes(searchTerm.toLowerCase());
+    const matchesCat = !searchCategory || p.nameDepartment === searchCategory;
+    return matchesName && matchesCat;
+  });
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className='form'>
-        
-        <input 
-          type="text" 
-          placeholder="Código del Producto" 
-          value={codeProduct} 
-          onChange={(e) => setCodeProduct(e.target.value)} 
-          required 
-        />
-        
-        <input 
-          type="text" 
-          placeholder="Nombre del producto" 
-          value={productName} 
-          onChange={(e) => setProductName(e.target.value)} 
-          required 
-        />
-        
-        <input 
-          type="number" 
-          placeholder="Precio de venta" 
-          value={priceProduct} 
-          onChange={(e) => setPriceProduct(e.target.value)} 
-          required 
-        />
-      
-        <input 
-          type="number" 
-          placeholder="Precio de compra" 
-          value={costPriceProduct} 
-          onChange={(e) => setCostPriceProduct(e.target.value)} 
-          required 
-        />
-        
-        <input 
-          type="number" 
-          placeholder="Stock inicial" 
-          value={stockProduct} 
-          onChange={(e) => setStockProduct(e.target.value)} 
-          required 
-        />
+    <div className="admin-container">
+      {/* Feedback */}
+      {feedback && (
+        <div className={`feedback-msg ${feedback.type}`}>{feedback.msg}</div>
+      )}
 
-        <input 
-          type="number" 
-          placeholder="Stock crítico" 
-          value={criticProduct} 
-          onChange={(e) => setCriticProduct(e.target.value)} 
-        />
-        <input
-        type='text'
-        placeholder='indique la categoria'
-        value={nameDepartment}
-        onChange={(e) => setNameDepartment(e.target.value)}
-        />
-        <textarea 
-          placeholder="Descripción" 
-          value={descriptionProduct} 
-          onChange={(e) => setDescriptionProduct(e.target.value)} 
-        />
-        <button type='submit' className='btn'>Registrar producto</button>
-      </form>
-    
-      <form onSubmit={actualizarProducto} className='form'>
-        <input 
-          type="text" 
-          placeholder="Nombre del Producto a actualizar" 
-          value={updateProductName} 
-          onChange={(e) => setUpdateProductName(e.target.value)} 
-          required 
-        />
+      {/* Header */}
+      <div className="admin-header">
+        <p className="admin-subtitle">Panel de Trabajador</p>
+        <h1 className="admin-title">Gestión</h1>
+      </div>
 
-        <input 
-          type="text" 
-          placeholder="Nuevo código del Producto"
-          value={updateCodeProduct}
-          onChange={(e) => setUpdateCodeProduct(e.target.value)} 
-        />
+      {/* Section tabs */}
+      <div className="section-tabs">
+        <button
+          className={`section-tab ${section === "productos" ? "active" : ""}`}
+          onClick={() => { setSection("productos"); setActiveTab("registrar"); }}
+        >
+          Productos
+        </button>
+        <button
+          className={`section-tab ${section === "usuarios" ? "active" : ""}`}
+          onClick={() => { setSection("usuarios"); setActiveTab("registrar"); }}
+        >
+          Usuarios
+        </button>
+      </div>
 
-        <input 
-          type="number" 
-          placeholder="Nuevo precio de venta"
-          value={updatePriceProduct}
-          onChange={(e) => setUpdatePriceProduct(e.target.value)} 
-        />
+      {/* Product Section */}
+      {section === "productos" && (
+        <>
+          <div className="tabs-container">
+            {PRODUCT_TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-        <input 
-          type="number" 
-          placeholder="Nuevo precio de compra"
-          value={updateCostPriceProduct}
-          onChange={(e) => setUpdateCostPriceProduct(e.target.value)} 
-        /> 
+          {/* Registrar Producto */}
+          {activeTab === "registrar" && (
+            <div>
+              <div className="product-grid">
+                <Field label="Código" value={product.codeProduct} onChange={pf("codeProduct")} placeholder="ej. PROD-001" required />
+                <Field label="Nombre" value={product.productName} onChange={pf("productName")} placeholder="Nombre" required />
+                <Field label="Precio venta" type="number" value={product.priceProduct} onChange={pf("priceProduct")} placeholder="0" required />
+                <Field label="Precio compra" type="number" value={product.costPriceProduct} onChange={pf("costPriceProduct")} placeholder="0" required />
+                <Field label="Stock" type="number" value={product.stockProduct} onChange={pf("stockProduct")} placeholder="0" required />
+                <Field label="Stock crítico" type="number" value={product.criticProduct} onChange={pf("criticProduct")} placeholder="0" />
+                <Field label="Categoría" type="select" value={product.nameDepartment} onChange={pf("nameDepartment")} options={depOptions} full />
+                <Field label="Descripción" type="textarea" value={product.descriptionProduct} onChange={pf("descriptionProduct")} placeholder="Descripción..." full />
+                <div className="field-container field-full-width">
+                  <ImageUpload
+                  label="Imagen del producto"
+                  value={product.imageProduct}
+                  onChange={(base64) => setProduct(prev => ({ ...prev, imageProduct: base64 }))}
+                  full
+                />
+                </div>
+              </div>
+              <div className="button-container">
+                <PrimaryButton onClick={handleRegistrarProducto}>Registrar producto</PrimaryButton>
+              </div>
+            </div>
+          )}
 
-        <input 
-          type="number" 
-          placeholder="Nuevo stock inicial"
-          value={updateStockProduct}
-          onChange={(e) => setUpdateStockProduct(e.target.value)} 
-        />
+          {/* Actualizar Producto */}
+          {activeTab === "actualizar" && (
+            <div>
+              <div className="product-list-search">
+                <div className="field-container">
+                  <label className="field-label">Buscar por nombre</label>
+                  <input className="field-input" type="text" placeholder="Nombre del producto..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                </div>
+                <div className="field-container">
+                  <label className="field-label">Filtrar por categoría</label>
+                  <select className="field-input" value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)}>
+                    <option value="">-- Todas --</option>
+                    {depOptions.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <button className="primary-button" onClick={fetchProductList} style={{ alignSelf: "flex-end" }}>Refrescar</button>
+              </div>
 
-        <input 
-          type="number" 
-          placeholder="Nuevo stock crítico"
-          value={updateCriticProduct}
-          onChange={(e) => setUpdateCriticProduct(e.target.value)} 
-        />
+              <div className="product-list-horizontal">
+                {filteredProducts.length === 0 ? (
+                  <p style={{ color: '#888', textAlign: 'center', width: '100%' }}>No se encontraron productos.</p>
+                ) : (
+                  filteredProducts.map(p => (
+                    <div
+                      key={p.codeProduct || p.productName}
+                      className={`product-card-mini ${updateProduct.productName === p.productName ? "selected" : ""}`}
+                      onClick={() => {
+                        setUpdateProduct({
+                          codeProduct: p.codeProduct || "",
+                          productName: p.productName || "",
+                          priceProduct: p.priceProduct ?? "",
+                          costPriceProduct: p.costPriceProduct ?? "",
+                          stockProduct: p.stockProduct ?? "",
+                          criticProduct: p.criticProduct ?? "",
+                          descriptionProduct: p.descriptionProduct || "",
+                          nameDepartment: p.nameDepartment || "",
+                          imageProduct: p.imageProduct || "",
+                        });
+                      }}
+                    >
+                      <div className="product-card-mini-img">
+                        {p.imageProduct ? (
+                          <img src={p.imageProduct} alt={p.productName} />
+                        ) : (
+                          <div className="product-card-mini-placeholder">
+                            {(p.productName || "?").charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <span className="product-card-mini-name">{p.productName}</span>
+                      <span className="product-card-mini-price">${p.priceProduct}</span>
+                    </div>
+                  ))
+                )}
+              </div>
 
-        <input
-          type='text'
-          placeholder='Nueva categoría'
-          value={updateNameDepartment}
-          onChange={(e) => setUpdateNameDepartment(e.target.value)}
-        />
+              <div className="product-grid">
+                <Field label="Nombre (exacto)" value={updateProduct.productName} onChange={pu("productName")} placeholder="Nombre exacto" required full />
+                <Field label="Nuevo código" value={updateProduct.codeProduct} onChange={pu("codeProduct")} placeholder="ej. PROD-002" />
+                <Field label="Nueva categoría" type="select" value={updateProduct.nameDepartment} onChange={pu("nameDepartment")} options={depOptions} />
+                <Field label="Nuevo precio venta" type="number" value={updateProduct.priceProduct} onChange={pu("priceProduct")} placeholder="0" />
+                <Field label="Nuevo precio compra" type="number" value={updateProduct.costPriceProduct} onChange={pu("costPriceProduct")} placeholder="0" />
+                <Field label="Nuevo stock" type="number" value={updateProduct.stockProduct} onChange={pu("stockProduct")} placeholder="0" />
+                <Field label="Nuevo stock crítico" type="number" value={updateProduct.criticProduct} onChange={pu("criticProduct")} placeholder="0" />
+                <Field label="Nueva descripción" type="textarea" value={updateProduct.descriptionProduct} onChange={pu("descriptionProduct")} placeholder="Nueva descripción..." full />
+                <div className="field-container field-full-width">
+                  <ImageUpload
+                    label="Nueva imagen del producto"
+                    value={updateProduct.imageProduct}
+                    onChange={(base64) =>
+                      setUpdateProduct(prev => ({
+                        ...prev,
+                        imageProduct: base64
+                      }))
+                    }
+                    full
+                />
+              </div>
+              </div>
+              <div className="button-container">
+                <PrimaryButton onClick={handleActualizarProducto}>Actualizar producto</PrimaryButton>
+              </div>
+            </div>
+          )}
 
-        <textarea 
-          placeholder="Nueva descripción" 
-          value={updateDescriptionProduct} 
-          onChange={(e) => setUpdateDescriptionProduct(e.target.value)} 
-        />
+          {/* Eliminar Producto */}
+          {activeTab === "eliminar" && (
+            <div className="danger-zone">
+              <p className="danger-label">Zona de peligro</p>
+              <p className="danger-text">Ésta acción es irreversible. Ingresa el nombre exacto del producto.</p>
+              <div className="delete-action-row">
+                <div style={{ flex: 1 }}>
+                  <Field
+                    label="Nombre del producto"
+                    value={deleteProductName}
+                    onChange={(e) => setDeleteProductName(e.target.value)}
+                    placeholder="Nombre exacto"
+                    required
+                  />
+                </div>
+                <button className="delete-button" onClick={handleEliminarProducto}>
+                  Eliminar producto
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
-        <button type='submit' className='btn'>Actualizar producto</button>
-      </form>
-    </>
+      {/* User Section */}
+      {section === "usuarios" && (
+        <>
+          <div className="tabs-container">
+            {USER_TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`tab-button ${activeTab === tab.id ? "active" : ""}`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Registrar Usuario */}
+          {activeTab === "registrar" && (
+            <div>
+              <div className="user-grid">
+                <Field label="Nombre" value={user.nameUser} onChange={uf("nameUser")} placeholder="Nombre" required />
+                <Field label="Apellido" value={user.surnameUser} onChange={uf("surnameUser")} placeholder="Apellido" required />
+                <Field label="Email" type="email" value={user.emailUser} onChange={uf("emailUser")} placeholder="correo@ejemplo.com" required full />
+                <Field label="Contraseña" type="password" value={user.passwordUser} onChange={uf("passwordUser")} placeholder="••••••" required />
+                <Field label="Teléfono" type="number" value={user.cellphoneUser} onChange={uf("cellphoneUser")} placeholder="9 dígitos" required />
+                <Field label="Rol" type="select" value={user.role} onChange={uf("role")} options={ROLES.map(r => ({ value: r, label: r }))} />
+              </div>
+              <div className="button-container">
+                <PrimaryButton onClick={handleRegistrarUsuario}>Registrar usuario</PrimaryButton>
+              </div>
+            </div>
+          )}
+
+          {/* Actualizar Usuario */}
+          {activeTab === "actualizar" && (
+            <div>
+              <div className="user-grid">
+                <Field label="Email del usuario a actualizar" type="email" value={updateUser.emailUser} onChange={uu("emailUser")} placeholder="correo@ejemplo.com" required full />
+                <Field label="Nuevo nombre" value={updateUser.nameUser} onChange={uu("nameUser")} placeholder="Nombre" />
+                <Field label="Nuevo apellido" value={updateUser.surnameUser} onChange={uu("surnameUser")} placeholder="Apellido" />
+                <Field label="Nueva contraseña" type="password" value={updateUser.passwordUser} onChange={uu("passwordUser")} placeholder="••••••" />
+                <Field label="Nuevo teléfono" type="number" value={updateUser.cellphoneUser} onChange={uu("cellphoneUser")} placeholder="9 dígitos" />
+                {/* El rol no se puede actualizar desde panel de trabajador */}
+              </div>
+              <div className="button-container">
+                <PrimaryButton onClick={handleActualizarUsuario}>Actualizar usuario</PrimaryButton>
+              </div>
+            </div>
+          )}
+
+         {/* Eliminar Usuario */}
+{/*Solamentee esta disponible en el panel de administrador, el trabajador no tiene permisos para eliminar usuarios*/}
+
+          
+          {/* Listar Usuarios */}
+          {activeTab === "listar" && (
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <p style={{ fontSize: 14, color: '#666' }}>{usersList.length} usuario(s) encontrado(s)</p>
+                <button className="primary-button" onClick={handleListarUsuarios}>
+                  Recargar
+                </button>
+              </div>
+              {usersList.length === 0 ? (
+                <p style={{ color: '#888', textAlign: 'center' }}>No hay usuarios para mostrar.</p>
+              ) : (
+                <div className="user-list">
+                  {usersList.map((u, i) => (
+                    <div className="user-card" key={u.emailUser ?? i}>
+                      <h5>{u.nameUser} {u.surnameUser}</h5>
+                      <p><strong>Email:</strong> {u.emailUser}</p>
+                      <p><strong>Teléfono:</strong> {u.cellphoneUser}</p>
+                      <p><strong>Rol:</strong> {u.role}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }

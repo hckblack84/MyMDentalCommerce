@@ -34,7 +34,7 @@ public class AuthController {
     @PostMapping(path = "/register")
     public ResponseEntity<DTOUserEntity> registerUser(@RequestBody DTOUserEntity dtoUserEntity) throws InterruptedException {
         Thread.sleep(2000L);
-        return ResponseEntity.ok(userEntityService.createUser(dtoUserEntity));
+        return ResponseEntity.ok(userEntityService.createDefaultUser(dtoUserEntity));
 
     }
 

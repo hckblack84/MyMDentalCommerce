@@ -37,4 +37,12 @@ public class DepartmentService {
                 new NotFoundEntityException(ExceptionValues.DEPARTMENT_NOT_FOUND_CODE, Entities.DEPARTMENT, ExceptionValues.DEPARTMENT_NOT_FOUND_EXCEPTION_MESSAGE));
         return dtoDepartment.parseToDTODepartment(department);
     }
+
+    public DTODepartment createDepartment(DTODepartment dtoDepartment) {
+
+        Department d = Department.builder()
+                .nameDepartment(dtoDepartment.getNameDepartment())
+                .build();
+        return dtoDepartment.parseToDTODepartment(departmentRepository.save(d));
+    }
 }

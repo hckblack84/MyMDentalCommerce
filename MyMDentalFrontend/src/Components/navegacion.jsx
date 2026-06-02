@@ -5,13 +5,16 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../Styles/navegacion.css';
 import logoImagen from '../assets/Imagenes/Logomym.png';
 
+
 export default function Navegacion() {
   const [mostrarMenu, setMostrarMenu] = useState(false);
   const [categorias, setCategorias] = useState([]);
   const timeoutRef = useRef(null); //  guarda el timer
+  const URL = import.meta.env.VITE_API_DEPARTMENTS
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
-    fetch('http://localhost:8080/MyMDentalCommerce/departments/getDepartments')
+    fetch(URL)
       .then(response => response.json())
       .then(data => setCategorias(data))
       .catch(error => console.error("Error cargando categorías:", error));
@@ -48,26 +51,44 @@ export default function Navegacion() {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
             <li className="nav-item">
-              <Link className="nav-link" to="/administrador">
-                Admin
-              </Link>
+              {role === "ADMINISTRATOR" && (
+                <Link className="nav-link" to="/administrador">
+                  Admin
+                </Link>
+              )}
+            </li>
+            
+            <li className="nav-item">
+              {role === "ADMINISTRATOR" || role === "WORKER" ? (
+                <Link className="nav-link" to="/Orders">
+                  Orders
+                </Link>
+              ) : null}
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link" to="/trabajador">
-                Trabajador
-              </Link>
+              {role === "WORKER" || role === "ADMINISTRATOR" ? (
+                <Link className="nav-link" to="/trabajador">
+                  Trabajador
+                </Link>
+              ) : null}
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link" to="/Inicio_sesion">
-                Inicio De Sesion
+              <Link className="nav-link" to="/acceder">
+                Acceder
               </Link>
             </li>
 
             <li className="nav-item">
               <Link className="nav-link" to="/carrito">
                 Carrito
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/Perfil">
+                Perfil
               </Link>
             </li>
 

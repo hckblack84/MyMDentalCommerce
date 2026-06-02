@@ -1,12 +1,10 @@
 import React from "react";
 
-// Componente interno para los miembros del equipo
 const TeamMember = ({ name, role, description }) => (
   <div className="col-md-4 mb-4">
     <div className="card h-100 border-0 shadow-sm text-center p-3">
       <div className="d-flex justify-content-center">
         <div className="rounded-circle bg-secondary mt-3" style={{ width: '100px', height: '100px' }}>
-             {/* Aquí podrías poner una etiqueta <img /> más adelante */}
         </div>
       </div>
       <div className="card-body">

@@ -22,6 +22,8 @@ public class Product {
     private String productName;
     @Column(name = "description_product", length = 300, unique = false, nullable = true)
     private String descriptionProduct;
+    @Column(name = "url_product", length = 300, unique = false, nullable = false)
+    private String urlProduct;
 
     //Stock info
 
@@ -36,6 +38,10 @@ public class Product {
     private Long priceProduct;
     @Column(name = "cost_price_product", length = 10, unique = false, nullable = false)
     private Long costPriceProduct;
+
+
+    @Column(name = "active_product", unique = false, nullable = false)
+    private boolean activeProduct;
 
     //Foreign keys
 

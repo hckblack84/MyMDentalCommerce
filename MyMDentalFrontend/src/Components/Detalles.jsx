@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import logoImagen from '../assets/Imagenes/Logomym.png';
 
+const API_PRODUCT_BY_ID = import.meta.env.VITE_API_5;
 
 const Detalles = () => {
   const { idProduct } = useParams() 
@@ -11,7 +12,10 @@ const Detalles = () => {
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/MyMDentalCommerce/products/getProduct/${idProduct}`) 
+        const response = await fetch(`${API_PRODUCT_BY_ID}/${idProduct}`, {
+          method: 'GET',
+          credentials: 'include'
+        });
         if (!response.ok){
           throw new Error("Error al cargar los detalles, tamo trabajando pa esto we ;(")
         }
