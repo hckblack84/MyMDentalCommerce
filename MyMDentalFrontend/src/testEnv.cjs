@@ -1,0 +1,12 @@
+process.env.VITE_API_PRODUCTS = "http://localhost:8080/api/products";
+process.env.VITE_API_DEPARTMENTS = "http://localhost:8080/api/departments";
+process.env.VITE_API_GetUsers = "http://localhost:8080/api/users";
+process.env.VITE_API_USER_REGISTER = "http://localhost:8080/api/register";
+process.env.VITE_API_UPDATE_USER = "http://localhost:8080/api/update";
+process.env.VITE_API_DELETE_USER = "http://localhost:8080/api/delete";
+process.env.VITE_API_5 = "http://localhost:8080/api/product";
+process.env.VITE_API_7 = "http://localhost:8080/api/orders";
+process.env.VITE_API_8 = "http://localhost:8080/api/check";
+process.env.VITE_API_9 = "http://localhost:8080/api/profile";
+process.env.VITE_API_10 = "http://localhost:8080/api/edit";
+process.env.VITE_API_USER_LOGIN = "http://localhost:8080/api/login";

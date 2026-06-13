@@ -14,5 +14,8 @@ module.exports = {
         runtime: "automatic"
       }
     ]
+  ],
+  plugins: [
+    "./babel-plugin-import-meta-env.cjs"
   ]
 };
