@@ -18,9 +18,9 @@ const manejarSubmit = async (e) => {
     setErrores("");
 
 
-InvalidNumbers=("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
-IvnvalidCharacters=["@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".", "?","/"]
-EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
+const InvalidNumbers=("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+const InvalidCharacters=["@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".", "?","/"]
+const EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
 
 
 //Apartado de validaciones para el formulario de registro
@@ -62,18 +62,18 @@ EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
     }
 
     if( nombre.includes(InvalidNumbers) ||
-        nombre.includes(IvnvalidCharacters)){
+        nombre.includes(InvalidCharacters)){
         setErrores("El nombre no puede contener números ni caracteres especiales");
         return;
     }
 
-    if( apellido.includes(IvnvalidCharacters) ||
+    if( apellido.includes(InvalidCharacters) ||
         apellido.includes(InvalidNumbers) ){
         setErrores("El apellido no puede contener números ni caracteres especiales");
         return;
     }
        
-    if(telefono.includes(IvnvalidCharacters)){
+    if(telefono.includes(InvalidCharacters)){
     setErrores("El teléfono no puede contener caracteres especiales");
     return;
     }

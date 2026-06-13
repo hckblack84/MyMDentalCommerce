@@ -99,11 +99,11 @@ export default function Productos({ isFiltered = false, filter = "" }) {
           {pagesButtons.map((indexButton) => {
             if (indexButton === currentPage){
               return(
-                <button id={indexButton} className='col-1 align-center text-center' disabled>{indexButton}</button>
+                <button key={indexButton} id={indexButton} className='col-1 align-center text-center' disabled>{indexButton}</button>
               );
             }else{
               return(
-                <button id={indexButton} className='col-1 align-center text-center'
+                <button key={indexButton} id={indexButton} className='col-1 align-center text-center'
                 onClick={() => searchProductsByPage(indexButton)}
                 >{indexButton}</button>
               );
