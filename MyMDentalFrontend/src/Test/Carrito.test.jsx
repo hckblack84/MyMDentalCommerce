@@ -1,64 +1,47 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import { Carrito } from "../Pages/Carrito";
 import { MemoryRouter } from "react-router-dom";
-import Productos from "../Components/Productos";
 
-const mockAddToCart = jest.fn();
+const mockConfirmPurchase = jest.fn();
 
 jest.mock("../Context/CartContext", () => ({
   useCarrito: () => ({
-    addToCart: mockAddToCart
+    cart: [
+      {
+        idProduct: 2,
+        productName: "Cepillo dental",
+        priceProduct: 5000,
+        quantity: 1
+      }
+    ],
+    loadingPetition: false,
+    error: false,
+    errorBody: null,
+    addToCart: jest.fn(),
+    reduceQuantityFromCart: jest.fn(),
+    deleteFromCart: jest.fn(),
+    deleteCart: jest.fn(),
+    getAllQuantityFromCart: jest.fn(),
+    getTotalPriceFromCart: jest.fn(() => 5000),
+    getTotalPriceFromProduct: jest.fn(() => 5000),
+    saveCartInLocalStorage: jest.fn(),
+    getCartFromLocalStorage: jest.fn(),
+    confirmPurchase: mockConfirmPurchase
   })
 }));
 
-jest.mock("../Hooks/UseProducts", () => ({
-  useProductsState: () => ({
-    productsState: {
-      products: [
-        {
-          idProduct: 2,
-          codeProduct: "002",
-          productName: "Cepillo dental",
-          descriptionProduct: "Pasta para dientes sensibles",
-          priceProduct: 5000,
-          stockProduct: 20
-        }
-      ],
-      loading: false,
-      error: false,
-      errorBody: null,
-      searchProductsByPage: jest.fn()
-    },
-    pagesState: {
-      maxPages: 1,
-      currentPage: 1,
-      loadingPages: false,
-      errorPages: false,
-      errorBodyPages: null
-    }
-  })
-}));
+test("ejecuta confirmPurchase al presionar Finalizar Compra", () => {
+  render(
+    <MemoryRouter>
+      <Carrito />
+    </MemoryRouter>
+  );
 
-describe("Añadir productos al carrito", () => {
-  test("Añade el producto al carrito", () => {
-    render(
-      <MemoryRouter>
-        <Productos />
-      </MemoryRouter>
-    );
-
-    const boton = screen.getByRole("button", {
-      name: /añadir al carro socio/i
-    });
-
-    fireEvent.click(boton);
-
-    expect(mockAddToCart).toHaveBeenCalledWith({
-      idProduct: 2,
-      codeProduct: "002",
-      productName: "Cepillo dental",
-      descriptionProduct: "Pasta para dientes sensibles",
-      priceProduct: 5000,
-      stockProduct: 20
-    });
+  const boton = screen.getByRole("button", {
+    name: /finalizar compra/i
   });
+
+  fireEvent.click(boton);
+
+  expect(mockConfirmPurchase).toHaveBeenCalledTimes(1);
 });

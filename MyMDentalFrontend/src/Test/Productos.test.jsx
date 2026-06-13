@@ -5,10 +5,12 @@ import {fireEvent} from "@testing-library/react";
 
 
 const mockSearchProductsByPage = jest.fn();
+const mockAddToCart = jest.fn();
+
 
 jest.mock("../Context/CartContext", () => ({
   useCarrito: () => ({
-    addToCart: jest.fn()
+    addToCart: mockAddToCart
   })
 }));
 
@@ -97,5 +99,27 @@ describe("Productos", () => {
     beforeEach(() => {
       jest.clearAllMocks();
     });
+
+
+
+    test("agrega el producto al carrito al hacer click en 'Agregar al Carrito'", () => {
+      render(<MemoryRouter><Productos /></MemoryRouter>)
+
+      const botonAgregar = screen.getByRole("button", {name: /añadir al carro socio/i});
+
+      fireEvent.click(botonAgregar);
+
+      expect(mockAddToCart).toHaveBeenCalledWith({
+          idProduct: 1,
+          codeProduct: "001",
+          productName: "Pasta Dental",
+          descriptionProduct: "Pasta para dientes sensibles",
+          priceProduct: 5000,
+          stockProduct: 20
+
+    });
+
+    });
+
     
 });
