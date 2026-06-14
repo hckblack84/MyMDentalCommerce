@@ -80,8 +80,6 @@ class ProductVerificationTest {
         assertNull(productVerification.nullVerification(dtoProductAdmin));
     }
 
-    //Invalid values tests
-
     @Test
     @DisplayName("Value Validation: Should return field name for invalid values")
     void validValues_shouldReturnFieldNameForInvalidValues() {
