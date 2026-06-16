@@ -160,4 +160,5 @@ describe("Administrador", () => {
     expect(screen.getByPlaceholderText("correo@ejemplo.com")).toBeInTheDocument();
   });
 
+  
 });
