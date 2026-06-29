@@ -9,6 +9,7 @@ export default function EditarDatos() {
     const [surnameUser, setSurnameUser] = useState("");
     const [cellphoneUser, setCellphoneUser] = useState("");
 
+
     useEffect(() => {
         const email = localStorage.getItem("useremail");
 
@@ -62,7 +63,9 @@ export default function EditarDatos() {
 
    return (
     <>
-  <div className="container">
+
+    <div className="container">
+
     <h1 className="title">Editar Datos</h1>
 
     <form className="editar-card" onSubmit={handleSubmit}>
@@ -84,5 +87,7 @@ export default function EditarDatos() {
       <button type="submit">Guardar Cambios</button>
     </form>
   </div>
+  
     </>
+    
 )};

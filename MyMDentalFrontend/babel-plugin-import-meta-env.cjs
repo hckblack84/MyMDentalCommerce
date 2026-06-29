@@ -5,7 +5,6 @@ module.exports = function (babel) {
     visitor: {
       MemberExpression(path) {
         const { node } = path;
-
         if (
           node.object?.type === "MemberExpression" &&
           node.object.object?.type === "MetaProperty" &&

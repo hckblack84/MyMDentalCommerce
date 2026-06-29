@@ -1,12 +1,16 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
+import useCerrarSesion from '../Hooks/useCerrarSesion';
+
 import '../Styles/Perfil.css';
 
 const API_9 = import.meta.env.VITE_API_9;
 
 export default function Perfil() {
     const [user, setUser] = useState({});
+    const { cerrarSesion } = useCerrarSesion();
+
 
     useEffect(() => {
             const email = localStorage.getItem("useremail");
@@ -57,6 +61,8 @@ export default function Perfil() {
         </div>
 
        <button onClick={() => window.location.href = "/EditarDatos"}>Editar Datos</button>
+        <button className="cerrar-sesion-button" onClick={cerrarSesion}>Cerrar Sesión</button>
+
       </div>
     </>
   );
