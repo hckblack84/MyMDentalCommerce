@@ -229,7 +229,6 @@ export default function Administrador() {
         credentials: "include", 
       });
 
-
       const text = await res.text();
 
       console.log("STATUS:", res.status);
@@ -239,7 +238,20 @@ export default function Administrador() {
         showFeedback("Producto registrado exitosamente", "success");
         setProduct({ ...INITIAL_PRODUCT });
       } else {
-        showFeedback("Error al registrar el producto", "error");
+        let mensajeError = "Error al registrar el producto";
+
+        try {
+          if (text) {
+            const errorData = JSON.parse(text); 
+            
+            mensajeError = errorData.message || errorData.error || mensajeError;
+          }
+        } catch (parseError) {
+          if (text && text.length < 100) {
+             mensajeError = text;
+          }
+        }
+        showFeedback(mensajeError, "error");
       }
     } catch (error) {
       console.error(error);
@@ -282,43 +294,41 @@ const handleActualizarProducto = async () => {
       }
     );
 
-    const text = await res.text();
+   const text = await res.text();
 
-    console.log("STATUS:", res.status);
-    console.log("RESPUESTA:", text);
+      console.log("STATUS:", res.status);
+      console.log("RESPUESTA:", text);
 
-    if (res.ok) {
-      showFeedback(
-        "Producto actualizado exitosamente",
-        "success"
-      );
+      if (res.ok) {
+        showFeedback("Producto actualizado exitosamente", "success");
+        setUpdateProduct({ ...INITIAL_PRODUCT });
+        fetchProductList();
+      } else {
+        let mensajeError = "Error al registrar el producto";
 
-      setUpdateProduct({
-        ...INITIAL_PRODUCT
-      });
-
-      fetchProductList();
-
-    } else {
-      showFeedback(
-        "Error al actualizar el producto",
-        "error"
-      );
+        try {
+          if (text) {
+            const errorData = JSON.parse(text); 
+            
+            mensajeError = errorData.message || errorData.error || mensajeError;
+          }
+        } catch (parseError) {
+          if (text && text.length < 100) {
+             mensajeError = text;
+          }
+        }
+        showFeedback(mensajeError, "error");
+      }
+    } catch (error) {
+      console.error(error);
+      showFeedback("Error de conexión con el servidor", "error");
     }
-
-  } catch(error) {
-
-    console.error(error);
-
-    showFeedback(
-      "Error de conexión con el servidor",
-      "error"
-    );
-  }
-};
+  };
 
   const handleEliminarProducto = () => {
-    if (!deleteProductName) return showFeedback("Ingresa el nombre del producto.", "error");
+    if (!deleteProductName) 
+      return showFeedback("Ingresa el nombre del producto.", "error");
+    
     fetch(`${API_PRODUCTS}/deleteProduct/${deleteProductName}`, { method: "DELETE", credentials: "include" })
       .then(res => {
         if (res.ok) {
@@ -450,7 +460,7 @@ const handleActualizarProducto = async () => {
             ))}
           </div>
 
-          {/* Registrar Producto */}
+          {/*   Producto */}
           {activeTab === "registrar" && (
             <div>
               <div className="product-grid">

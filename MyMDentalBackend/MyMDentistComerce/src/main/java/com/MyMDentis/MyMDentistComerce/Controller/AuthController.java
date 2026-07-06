@@ -46,5 +46,10 @@ public class AuthController {
         return ResponseEntity.ok(userEntityService.sessionUser(dtoCredentials, response));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        userEntityService.logout(response);
+        return ResponseEntity.ok("Sesión cerrada correctamente");
+    }
 
 }

@@ -10,12 +10,14 @@ export default function Crear_cuenta() {
     const [password2, setPassword2] = useState("");
     const [telefono, setTelefono] = useState("");
     const [rol, setRol] = useState("CLIENT");
+    
     const [errores, setErrores] = useState(null);
+    const [mensajeExito, setMensajeExito] = useState(null);
 
-
-const manejarSubmit = async (e) => {
-    e.preventDefault();
-    setErrores("");
+    const manejarSubmit = async (e) => {
+        e.preventDefault();
+        setErrores(null);
+        setMensajeExito(null);
 
 
 const InvalidNumbers=("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
@@ -78,96 +80,109 @@ const EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
     return;
     }
 
-
-
     try {
-        const response = await fetch("http://localhost:8080/MyMDentalCommerce/session/register", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nameUser: nombre,
-                surnameUser: apellido,
-                emailUser: email,
-                passwordUser: password,
-                cellphoneUser: telefono,
-                role: rol
-            })
-        });
+            const response = await fetch("http://localhost:8080/MyMDentalCommerce/session/register", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nameUser: nombre,
+                    surnameUser: apellido,
+                    emailUser: email,
+                    passwordUser: password,
+                    cellphoneUser: telefono,
+                    role: rol
+                })
+            });
 
-        if (!response.ok) {
-            throw new Error("Error al registrar");
+            const text = await response.text();
+
+            if (response.ok) {
+                setMensajeExito("Cuenta creada correctamente");
+            } else {
+                let mensajeError = "Error al crear la cuenta";
+
+                try {
+                    if (text) {
+                        const errorData = JSON.parse(text);
+                        mensajeError = errorData.message || errorData.error || mensajeError;
+                    }
+                } catch (parseError) {
+                    if (text && text.length < 100) {
+                        mensajeError = text;
+                    }
+                }
+                
+                setErrores(mensajeError);
+            }
+        } catch (error) {
+            console.error("Error en crear cuenta:", error);
+            setErrores("Error de conexión con el servidor");
         }
-
-        alert("Cuenta creada correctamente");
-
-    } catch (error) {
-        setErrores(error);
-    }
-};
+    };
 
 
-    return (
-   <div className="register-page"> 
-        <form onSubmit={manejarSubmit} className="form-container">
-            <h2 className="form-title">Crear Cuenta</h2>
+return (
+        <div className="register-page"> 
+            <form onSubmit={manejarSubmit} className="form-container">
+                <h2 className="form-title">Crear Cuenta</h2>
 
-            <div className="form-grid">
+                <div className="form-grid">
+                    <input 
+                        className="form-input"
+                        type="text" 
+                        placeholder="Nombre" 
+                        value={nombre} 
+                        onChange={(e) => setNombre(e.target.value)} 
+                    />
+                    <input 
+                        className="form-input"
+                        type="text" 
+                        placeholder="Apellido" 
+                        value={apellido} 
+                        onChange={(e) => setApellido(e.target.value)} 
+                    />
+                </div>
+
                 <input 
                     className="form-input"
-                    type="text" 
-                    placeholder="Nombre" 
-                    value={nombre} 
-                    onChange={(e) => setNombre(e.target.value)} 
+                    type="email" 
+                    placeholder="Email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
                 />
+
+                <div className="form-grid">
+                    <input 
+                        className="form-input"
+                        type="password" 
+                        placeholder="Contraseña" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                    />
+                    <input 
+                        className="form-input"
+                        type="password" 
+                        placeholder="Repetir Contraseña" 
+                        value={password2} 
+                        onChange={(e) => setPassword2(e.target.value)} 
+                    />
+                </div>
+
                 <input 
                     className="form-input"
-                    type="text" 
-                    placeholder="Apellido" 
-                    value={apellido} 
-                    onChange={(e) => setApellido(e.target.value)} 
+                    type="number"
+                    placeholder="Teléfono (9 dígitos)" 
+                    value={telefono}
+                    onChange={(e) => setTelefono(e.target.value)} 
                 />
-            </div>
 
-            <input 
-                className="form-input"
-                type="email" 
-                placeholder="Email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-            />
-
-            <div className="form-grid">
-                <input 
-                    className="form-input"
-                    type="password" 
-                    placeholder="Contraseña" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                />
-                <input 
-                    className="form-input"
-                    type="password" 
-                    placeholder="Repetir Contraseña" 
-                    value={password2} 
-                    onChange={(e) => setPassword2(e.target.value)} 
-                />
-            </div>
-
-            <input 
-                className="form-input"
-                type="number"
-                placeholder="Teléfono (9 dígitos)" 
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)} 
-            />
-
-            <button type="submit" className="form-button">Registrarse</button>
-            
-            {errores && <p className="error-message">{errores}</p>}
-        </form>
-    </div>
-  )
+                <button type="submit" className="form-button">Registrarse</button>
+                
+                {errores && <p className="error-message" style={{ color: 'red' }}>{errores}</p>}
+                {mensajeExito && <p className="success-message" style={{ color: 'green' }}>{mensajeExito}</p>}
+            </form>
+        </div>
+    );
 }
-

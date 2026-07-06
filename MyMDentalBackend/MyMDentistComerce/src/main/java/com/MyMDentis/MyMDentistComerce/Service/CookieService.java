@@ -6,7 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CookieService {
+public class CookieService{
+
 
     public void addHttpOnlyCookie(String name, String value, int maxAge, HttpServletResponse response) {
         response.addHeader("Set-Cookie",
@@ -16,8 +17,6 @@ public class CookieService {
                         "; HttpOnly" +
                         "; SameSite=Lax");
     }
-
-
 
     public void deleteCookie(String username, HttpServletResponse response) {
         Cookie cookie=new Cookie(username, null);

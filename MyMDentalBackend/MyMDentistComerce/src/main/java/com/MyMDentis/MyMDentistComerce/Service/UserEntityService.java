@@ -286,5 +286,12 @@ public class UserEntityService {
         return dtouser;
     }
 
+    public void logout(HttpServletResponse response) {
+        cookieService.deleteCookie("jwt", response);
+
+    }
+
+
+
 
 }
