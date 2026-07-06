@@ -5,8 +5,7 @@ const api4 = import.meta.env.VITE_API_4;
 
 
 export const getClientProductsByPage = async (pageIndex) => {
-    console.log(api1 + "/" + pageIndex)
-  const response = await fetch(api1 + "/" + pageIndex)
+  const response = await fetch(api1 + "/" + (pageIndex - 1))
   const data = await response.json().catch(() => null)
 
   if (!response.ok) {
@@ -20,7 +19,6 @@ export const getClientProductsByPage = async (pageIndex) => {
 }
 
 export const getDatesByProducts = async () => {
-    console.log(api2)
   const response = await fetch(api2)
   const data = await response.json().catch(() => null)
 
@@ -34,8 +32,7 @@ export const getDatesByProducts = async () => {
 }
 
 export const getClientProductsByPageFilter = async (departmentName, pageIndex) => {
-  console.log(api3 + "/" + departmentName + "/" + pageIndex)
-  const response = await fetch(api3 + "/" + departmentName + "/" + pageIndex)
+  const response = await fetch(api3 + "/" + departmentName + "/" + (pageIndex - 1))
   const data = await response.json().catch(() => null)
 
   if (!response.ok){
@@ -48,7 +45,6 @@ export const getClientProductsByPageFilter = async (departmentName, pageIndex) =
 }  
 
 export const getDatesByProductsFilter = async (departmentName) => {
-    console.log(api4 + "/" + departmentName)
   const response = await fetch(api4 + "/" + departmentName)
   const data = await response.json().catch(() => null)
 
