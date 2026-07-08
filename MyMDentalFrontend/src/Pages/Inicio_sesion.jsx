@@ -12,7 +12,7 @@ export default function InicioSesion() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/MyMDentalCommerce/session/login', {
+      const response = await fetch('/MyMDentalCommerce/session/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export default function InicioSesion() {
       navigate('/');
 
 
-      const perfilResponse = await fetch('http://localhost:8080/MyMDentalCommerce/session/perfil', {
+      const perfilResponse = await fetch('/MyMDentalCommerce/session/perfil', {
         credentials: "include"
       });
 

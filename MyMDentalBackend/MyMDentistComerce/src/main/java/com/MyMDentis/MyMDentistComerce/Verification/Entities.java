@@ -7,4 +7,5 @@ public interface Entities {
     String USER_ENTITY = "Usuario";
     String REQUEST = "Peticion";
     String RESERVED = "Reserva";
+    String ORDER = "Orden";
 }

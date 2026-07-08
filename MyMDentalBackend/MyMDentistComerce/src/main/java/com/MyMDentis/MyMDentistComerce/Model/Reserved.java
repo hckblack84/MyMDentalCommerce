@@ -34,6 +34,10 @@ public class Reserved {
     @ManyToOne
     private UserEntity userEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = true)
+    private Order order;
+
     @Column
     private boolean activeReserved;
 

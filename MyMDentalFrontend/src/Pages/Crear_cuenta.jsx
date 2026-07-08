@@ -81,7 +81,7 @@ const EmailContains=["@gmail.com", "@hotmail.com" ,"@outlook.com"]
     }
 
     try {
-            const response = await fetch("http://localhost:8080/MyMDentalCommerce/session/register", {
+            const response = await fetch("/MyMDentalCommerce/session/register", {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"

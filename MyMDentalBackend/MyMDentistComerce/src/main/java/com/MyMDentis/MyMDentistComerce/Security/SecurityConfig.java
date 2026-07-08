@@ -48,56 +48,49 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)
+                // NO deshabilites CSRF globalmente aquí. Lo haremos de forma selectiva.
+                // .csrf(AbstractHttpConfigurer::disable)
+
+                // 1. Configuración de CSRF selectiva (LA FORMA CORRECTA)
+                .csrf(csrf -> csrf
+                        // Ignora CSRF solo para el webhook, que viene de un servidor externo.
+                        .ignoringRequestMatchers("/MyMDentalCommerce/pay/webhook")
+                )
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sess ->
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        //----------------- SESIÓN Y REGISTRO -----------------
-                        .requestMatchers("/MyMDentalCommerce/session/**"
-                                ,"/MyMDentalCommerce/users/findbyemail/**"
-                        )
-                        .permitAll()
+                        .requestMatchers(
+                                "/MyMDentalCommerce/session/**",
+                                "/MyMDentalCommerce/users/findbyemail/**"
+                        ).permitAll()
 
-                        //----------------- PRODUCTOS (PÚBLICOS) -----------------
+                        .requestMatchers("/MyMDentalCommerce/pay/webhook").permitAll()
+
                         .requestMatchers(
                                 "/MyMDentalCommerce/products/clientProducts/page/**",
                                 "/MyMDentalCommerce/products/getClientProductById/**",
                                 "/MyMDentalCommerce/products/filterClientProductsByPage/**",
                                 "/MyMDentalCommerce/products/getMaxProductPages",
-                                "/MyMDentalCommerce/products/getMaxProductPagesByDepartment/**"
-
+                                "/MyMDentalCommerce/products/getMaxProductPagesByDepartment/**",
+                                "/MyMDentalCommerce/departments/getDepartments"
                         ).permitAll()
 
-                        //----------------- PRODUCTOS (TRABAJADOR Y ADMIN) -----------------
+                        .requestMatchers("/MyMDentalCommerce/pay/createOrder").authenticated()
+                        .requestMatchers("/MyMDentalCommerce/users/update/**", "/MyMDentalCommerce/users/getUseremail/**", "/MyMDentalCommerce/users/updatePerfil/**").authenticated()
+                        .requestMatchers("/MyMDentalCommerce/Reserved/saveNewReserved").authenticated()
+
                         .requestMatchers(
                                 "/MyMDentalCommerce/products/adminProducts/page/**",
                                 "/MyMDentalCommerce/products/filterAdminProducts/**",
                                 "/MyMDentalCommerce/products/saveProduct",
-                                "/MyMDentalCommerce/products/editProduct/**"
-                        ).hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
-
-                        //----------------- PRODUCTOS (SOLO ADMIN) -----------------
-                        .requestMatchers("/MyMDentalCommerce/products/deleteProduct/**")
-                        .hasAuthority(Roles.ADMINISTRATOR.name())
-
-                        //----------------- USUARIOS -----------------
-                        .requestMatchers("/MyMDentalCommerce/users/getUsers", "/MyMDentalCommerce/users/adminUpdate/**")
-                        .hasAuthority(Roles.ADMINISTRATOR.name())
-                        .requestMatchers("/MyMDentalCommerce/users/update/**", "/MyMDentalCommerce/users/getUseremail/**", "/MyMDentalCommerce/users/updatePerfil/**")
-                        .authenticated()
-
-                        //----------------- DEPARTAMENTOS -----------------
-                        .requestMatchers("/MyMDentalCommerce/departments/getDepartments").permitAll()
-                        .requestMatchers("/MyMDentalCommerce/departments/createDepartment")
-                        .hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
-
-                        //----------------- RESERVAS -----------------
-                        .requestMatchers(
+                                "/MyMDentalCommerce/products/editProduct/**",
+                                "/MyMDentalCommerce/departments/createDepartment",
                                 "/MyMDentalCommerce/Reserved/getAllReserved",
                                 "/MyMDentalCommerce/Reserved/getActiveReserved",
                                 "/MyMDentalCommerce/Reserved/getNoActiveReserved",
@@ -105,11 +98,16 @@ public class SecurityConfig {
                                 "/MyMDentalCommerce/Reserved/getReservedByUser/**",
                                 "/MyMDentalCommerce/Reserved/checkReserved/**"
                         ).hasAnyAuthority(Roles.ADMINISTRATOR.name(), Roles.WORKER.name())
-                        .requestMatchers("/MyMDentalCommerce/Reserved/saveNewReserved")
-                        .authenticated()
-                        .anyRequest().denyAll()
-                ).build();
 
+                        .requestMatchers(
+                                "/MyMDentalCommerce/products/deleteProduct/**",
+                                "/MyMDentalCommerce/users/getUsers",
+                                "/MyMDentalCommerce/users/adminUpdate/**"
+                        ).hasAuthority(Roles.ADMINISTRATOR.name())
+
+                        .anyRequest().denyAll()
+                )
+                .build();
     }
 
     @Bean

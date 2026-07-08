@@ -15,11 +15,21 @@ import { CartProvider } from './Context/CartContext'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import  {Carrito} from './Pages/Carrito'
 import { Navigate } from 'react-router-dom';
+import { initMercadoPago } from '@mercadopago/sdk-react';
+import { useEffect } from 'react'
+import PaymentFeedback from './Pages/PaymentFeedback';
 
+const MP_INIT_KEY = '__mercadopago_initialized__';
 
 function App() {
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window[MP_INIT_KEY]) return;
 
-const role= localStorage.getItem("role")
+    initMercadoPago('APP_USR-fcf538f0-3e17-4092-bde2-0b71f61bde59');
+    window[MP_INIT_KEY] = true;
+  }, []);
+const role = localStorage.getItem("role")
 
   return (
     <BrowserRouter>
@@ -66,6 +76,7 @@ const role= localStorage.getItem("role")
             }
           />
         <Route path="/carrito" element={<Carrito />} />
+        <Route path="/payment-feedback" element={<PaymentFeedback />} />
       </Routes>
       <Footer />
       </CartProvider>

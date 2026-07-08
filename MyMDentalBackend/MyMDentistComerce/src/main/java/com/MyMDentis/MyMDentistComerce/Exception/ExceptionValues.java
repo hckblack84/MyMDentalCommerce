@@ -64,4 +64,7 @@ public interface ExceptionValues {
 
     String INVALID_IMAGE_EXTENSION_CODE = "P-010";
     String INVALID_IMAGE_EXTENSION_MESSAGE = "Extension de archivo no permitido. Solo usar .jpg-.jpeg-.png-.svg";
+
+    String ORDER_NOT_FOUND_CODE = "O-001";
+    String ORDER_NOT_FOUND_MESSAGE = "Orden no encontrada";
 }

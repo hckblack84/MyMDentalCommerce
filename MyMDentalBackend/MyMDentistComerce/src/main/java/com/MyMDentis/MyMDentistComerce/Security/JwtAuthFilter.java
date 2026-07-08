@@ -32,7 +32,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             "/MyMDentalCommerce/products/getMaxProductPages",
             "/MyMDentalCommerce/products/getMaxProductPagesByDepartment/",
             "/MyMDentalCommerce/departments/getDepartments",
-            "/MyMDentalCommerce/departments/createDepartment"
+            "/MyMDentalCommerce/departments/createDepartment",
+            "/MyMDentalCommerce/pay/webhook"
     );
 
     private final JwtService jwtService;
