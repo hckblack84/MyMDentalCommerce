@@ -60,7 +60,7 @@ export default function AdminProductos({ isFiltered = false, filter = "" }) {
         <div className="col" key={producto.codeProduct}>
           <div className="card h-100 border border-black shadow-sm">
             <img 
-              src={logoImagen}
+              src={producto.urlProduct}
               className="card-img-top" 
               alt={producto.productName} 
             />

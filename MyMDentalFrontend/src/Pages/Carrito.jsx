@@ -145,7 +145,7 @@ const createOrderAndFetchPreferenceId = async () => {
                                 <li className="cart-item" key={producto.idProduct}>
                                     <div className="product-info">
                                         <img 
-                                            src={producto.imageProduct} 
+                                            src={producto.urlProduct} 
                                             className="product-image" 
                                             alt={producto.productName}
                                         />

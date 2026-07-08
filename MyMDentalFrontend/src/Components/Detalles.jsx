@@ -38,7 +38,7 @@ const Detalles = () => {
       <div className="row g-0">
             <div className="col-md-4 d-flex align-items-center p-3">
           <img 
-            src={logoImagen} 
+            src={producto.urlProduct} 
             className="img-fluid rounded-start" 
             alt={producto.productName} 
           />
