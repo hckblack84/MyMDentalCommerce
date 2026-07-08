@@ -52,14 +52,7 @@ public class SecurityConfig {
 
         return httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // NO deshabilites CSRF globalmente aquí. Lo haremos de forma selectiva.
-                // .csrf(AbstractHttpConfigurer::disable)
-
-                // 1. Configuración de CSRF selectiva (LA FORMA CORRECTA)
-                .csrf(csrf -> csrf
-                        // Ignora CSRF solo para el webhook, que viene de un servidor externo.
-                        .ignoringRequestMatchers("/MyMDentalCommerce/pay/webhook")
-                )
+                .csrf(AbstractHttpConfigurer::disable)
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sess ->

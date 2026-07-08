@@ -40,8 +40,8 @@ const createOrderAndFetchPreferenceId = async () => {
     }
 
     setIsLoadingPayment(true);
-    //setError(false);      // Reseteamos el estado de error al iniciar
-    //setErrorBody('');     // Limpiamos el mensaje de error anterior
+    //setError(false);    
+    //setErrorBody('');     
 
     try {
         const carritoBack = cart.map((producto) => ({
@@ -49,13 +49,12 @@ const createOrderAndFetchPreferenceId = async () => {
             quantityReserved: producto.quantity,
         }));
 
-        const response = await fetch('http://localhost:8080/MyMDentalCommerce/pay/createOrder', {
+        const response = await fetch('/MyMDentalCommerce/pay/createOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                //'Accept': 'text/plain',
-                //'Authorization': `Bearer ${tu_token_jwt}` // El token debe ser inyectado aquí
             },
+            credentials: 'include',
             body: JSON.stringify(carritoBack)
         });
 
@@ -95,14 +94,13 @@ const createOrderAndFetchPreferenceId = async () => {
             quantityReserved: item.quantity,
         }));
 
-        const backendUrl = 'http://localhost:8080/MyMDentalCommerce/pay/createOrder';
+        const backendUrl = '/MyMDentalCommerce/pay/createOrder';
         
-        // Asumo que tienes un interceptor de Axios o una función que añade el token
-        // a todas las peticiones. Si no, lo añadirías manualmente aquí.
+        
         const response = await fetch(backendUrl, {
             method: 'POST',
             body: JSON.stringify(petitions),
-            //credentials: 'include',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -116,7 +114,6 @@ const createOrderAndFetchPreferenceId = async () => {
         }
 
     } catch (err) {
-        // ... (manejo de errores)
         setIsLoading(false);
     }
 };
