@@ -54,20 +54,15 @@ public class ProductService {
     public ProductService(
             ProductRepository productRepository,
             ProductVerification productVerification,
-            DepartmentRepository departmentRepository,
-            @Value("${aws.accessKeyId}") String accessKey,
-            @Value("${aws.secretKey}") String secretKey,
-            @Value("${aws.sessionToken}") String sessionToken) {
+            DepartmentRepository departmentRepository
+            ) {
 
         this.productRepository = productRepository;
         this.productVerification = productVerification;
         this.departmentRepository = departmentRepository;
 
-        AwsSessionCredentials credentials = AwsSessionCredentials.create(accessKey, secretKey, sessionToken);
-
         this.s3Client = S3Client.builder()
                 .region(Region.US_EAST_1)
-                .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }
 

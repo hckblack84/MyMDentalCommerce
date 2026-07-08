@@ -53,10 +53,7 @@ class ProductServiceTest {
         productService = new ProductService(
                 productRepository,
                 productVerification,
-                departmentRepository,
-                "access key",
-                "secret key",
-                "session token"
+                departmentRepository
         );
 
         ReflectionTestUtils.setField(productService, "s3Client", s3Client);

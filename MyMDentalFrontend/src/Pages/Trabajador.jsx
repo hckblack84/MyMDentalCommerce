@@ -199,39 +199,98 @@ export default function Administrador() {
   }
 
   // Product handlers
-  const handleRegistrarProducto = () => {
-    fetch(`${API_PRODUCTS}/saveProduct`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    })
-      .then(res => {
-        if (res.ok) {
-          showFeedback("Producto registrado exitosamente", "success");
-          setProduct({ ...INITIAL_PRODUCT });
-        } else {
-          showFeedback("Error al registrar el producto", "error");
+  const handleRegistrarProducto = async () => {
+    if (!product.imageProduct) {
+      showFeedback("Por favor, selecciona una imagen para el producto.", "error");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      const { imageProduct, ...dtoProductAdmin } = product;
+
+      formData.append(
+        "product",
+        new Blob([JSON.stringify(dtoProductAdmin)], { type: "application/json" })
+      );
+
+      const response = await fetch(imageProduct);
+      const imageBlob = await response.blob();
+      formData.append("image", imageBlob, "imagen_producto.jpg");
+
+      const res = await fetch(`${API_PRODUCTS}/saveProduct`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      const text = await res.text();
+
+      if (res.ok) {
+        showFeedback("Producto registrado exitosamente", "success");
+        setProduct({ ...INITIAL_PRODUCT });
+      } else {
+        let mensajeError = "Error al registrar el producto";
+
+        try {
+          const errorData = JSON.parse(text);
+          mensajeError = errorData.message || errorData.error || mensajeError;
+        } catch {
+          if (text && text.length < 100) mensajeError = text;
         }
-      })
-      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+
+        showFeedback(mensajeError, "error");
+      }
+    } catch (error) {
+      console.error(error);
+      showFeedback("Error de conexión con el servidor", "error");
+    }
   };
 
-  const handleActualizarProducto = () => {
-    fetch(`${API_PRODUCTS}/editProduct/${updateProduct.productName}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updateProduct),
-    })
-      .then(res => {
-        if (res.ok) {
-          showFeedback("Producto actualizado exitosamente", "success");
-          setUpdateProduct({ ...INITIAL_PRODUCT });
-          fetchProductList();
-        } else {
-          showFeedback("Error al actualizar el producto", "error");
+  const handleActualizarProducto = async () => {
+    try {
+      const formData = new FormData();
+      const { imageProduct, ...dtoProductAdmin } = updateProduct;
+
+      formData.append(
+        "product",
+        new Blob([JSON.stringify(dtoProductAdmin)], { type: "application/json" })
+      );
+
+      if (imageProduct) {
+        const response = await fetch(imageProduct);
+        const imageBlob = await response.blob();
+        formData.append("image", imageBlob, "imagen_producto.jpg");
+      }
+
+      const res = await fetch(`${API_PRODUCTS}/editProduct/${updateProduct.productName}`, {
+        method: "PUT",
+        body: formData,
+        credentials: "include",
+      });
+
+      const text = await res.text();
+
+      if (res.ok) {
+        showFeedback("Producto actualizado exitosamente", "success");
+        setUpdateProduct({ ...INITIAL_PRODUCT });
+        fetchProductList();
+      } else {
+        let mensajeError = "Error al actualizar el producto";
+
+        try {
+          const errorData = JSON.parse(text);
+          mensajeError = errorData.message || errorData.error || mensajeError;
+        } catch {
+          if (text && text.length < 100) mensajeError = text;
         }
-      })
-      .catch(() => showFeedback("Error de conexión con el servidor", "error"));
+
+        showFeedback(mensajeError, "error");
+      }
+    } catch (error) {
+      console.error(error);
+      showFeedback("Error de conexión con el servidor", "error");
+    }
   };
 
   const handleEliminarProducto = () => {
