@@ -30,11 +30,26 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody Map<String, Object> notification) {
-        log.info("New webhook from mercado pago");
+        log.info("New webhook: " + notification);
 
-        if (notification.get("type").equals("payment")) {
-            String paymentId = String.valueOf(notification.get("data.id"));
-            paymentService.processWebhookNotification(paymentId);
+        if (notification.containsKey("type") && "payment".equals(notification.get("type"))) {
+            log.info("Payment notification received.");
+            Object dataObject = notification.get("data");
+            if (dataObject instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> dataMap = (Map<String, Object>) dataObject;
+                String paymentId = String.valueOf(dataMap.get("id"));
+
+                if (paymentId != null && !paymentId.equals("null")) {
+                    paymentService.processWebhookNotification(paymentId);
+                } else {
+                    log.warning("Invalid webhook id.");
+                }
+            } else {
+                log.warning("Webhook no format.");
+            }
+        } else {
+            log.info("it isn't ppayment type.");
         }
         return new ResponseEntity<>("Notification received", HttpStatus.OK);
     }
