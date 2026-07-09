@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useCarrito } from '../Context/CartContext';
 import { useProductsState } from '../Hooks/UseProducts';
 
+
 import Loader from './Loader';
 
 
@@ -56,62 +57,63 @@ export default function Productos({ isFiltered = false, filter = "" }) {
 
   return (
     <>
-    <div className="row row-cols-1 row-cols-md-4 g-4 container mx-auto">
+    <div className="row row-cols-1 row-cols-md-4 g-4 mx-auto">
       {products.map(producto => (
         <div className="col" key={producto.codeProduct}>
-          <div className="card h-100 border border-black shadow-sm">
-            <img 
-              src={producto.urlProduct}
-              className="card-img-top" 
-              alt={producto.productName} 
-            />
-            
-            <div className="card-body" id={producto.idProduct}>
-              <h5 className="card-title fw-bold">{producto.productName}</h5>
-              <p className="card-text text-muted">
-                {producto.descriptionProduct}
-              </p>
-              <p className="card-text fw-bold text-primary">
-                Precio: ${producto.priceProduct}
-              </p>
+          <div className="card-tecnica">
+            <div className="card-tecnica__image">
+              <img
+                src={logoImagen}
+                alt={producto.productName}
+                className="card-tecnica__img"
+              />
+            </div>
+            <span className="card-tecnica__badge">Código: {producto.codeProduct}</span>
+            <h3 className="card-tecnica__title">{producto.productName}</h3>
+            <p className="card-tecnica__desc">{producto.descriptionProduct}</p>
+
+            <div className="card-tecnica__grid">
+              <div className="card-tecnica__grid-item">
+                <b>Stock:</b> {producto.stockProduct}
+              </div>
+              <div className="card-tecnica__grid-item">
+              </div>
             </div>
 
-            <div className="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
-              <small className="text-muted">Stock: {producto.stockProduct}</small>
-              <Link to={`/producto/${producto.idProduct}`} className="btn btn-sm btn-outline-primary">
-                Detalles
-              </Link>           
+            <div className="card-tecnica__footer">
+              <span className="card-tecnica__price">${producto.priceProduct}</span>
+              <div className="card-tecnica__actions">
+                <Link
+                  to={`/producto/${producto.idProduct}`}
+                  className="card-tecnica__detalles"
+                >
+                  Detalles
+                </Link>
+                <button
+                  className="card-tecnica__comprar"
+                  onClick={() => addToCart(producto)}
+                >
+                  Comprar
+                </button>
+              </div>
             </div>
-
-            <button
-              className="btn btn-sm btn-primary w-100"
-              onClick={() => addToCart(producto)}
-            >
-              Añadir al carro socio
-            </button>
           </div>
         </div>
       ))}
     </div>
-
-    <div className='container'>
-        <div className='row'>
-          {pagesButtons.map((indexButton) => {
-            if (indexButton === currentPage){
-              return(
-                <button key={indexButton} id={indexButton} className='col-1 align-center text-center' disabled>{indexButton}</button>
-              );
-            }else{
-              return(
-                <button key={indexButton} id={indexButton} className='col-1 align-center text-center'
-                onClick={() => searchProductsByPage(indexButton)}
-                >{indexButton}</button>
-              );
-            }
-          })}
-        </div>
-
+      <div className="pagination-container">
+        {pagesButtons.map((page) => (
+          <button
+            key={page}
+            className={`pagination-button ${currentPage === page ? 'active' : ''}`}
+            onClick={() => getDatesByProductsPage(page)}
+          >
+            {page}
+          </button>
+        ))}
       </div>
+  
+
     </>
   )
 }
