@@ -1,3 +1,206 @@
-.container{
-    align-content: center;
+/* ==========================
+   CONTENEDOR
+========================== */
+
+.product-details {
+    background: #F8F9FA;
+    min-height: 100vh;
+    padding: 50px 20px;
+}
+
+/* ==========================
+   TARJETA
+========================== */
+
+.product-detail-card {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+}
+
+/* ==========================
+   IMAGEN
+========================== */
+
+.product-detail-image{
+    background:#f9fafb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.product-detail-image img{
+    width:100%;
+    max-width:350px;
+    object-fit:contain;
+    transition:.3s;
+}
+
+.product-detail-image img:hover{
+    transform:scale(1.05);
+}
+
+/* ==========================
+   INFORMACIÓN
+========================== */
+
+.product-detail-info{
+    padding:45px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.product-code{
+    color:#6b7280;
+    font-size:.9rem;
+    margin-bottom:10px;
+}
+
+.product-title{
+    font-size:2rem;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:20px;
+}
+
+.product-description{
+    color:#6b7280;
+    line-height:1.8;
+    margin-bottom:30px;
+}
+
+/* ==========================
+   ATRIBUTOS
+========================== */
+
+.product-attributes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    background:#f9fafb;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:25px;
+}
+
+.product-attributes div{
+    color:#6b7280;
+}
+
+.product-attributes b{
+    color:#374151;
+}
+
+/* ==========================
+   PRECIO
+========================== */
+
+.product-price{
+    font-size:2rem;
+    font-weight:700;
+    color:#111827;
+    margin-bottom:15px;
+}
+
+/* ==========================
+   STOCK
+========================== */
+
+.product-stock{
+    width:fit-content;
+    padding:10px 18px;
+    background:#DCFCE7;
+    color:#15803d;
+    border-radius:8px;
+    font-weight:600;
+    margin-bottom:30px;
+}
+
+/* ==========================
+   BOTÓN
+========================== */
+
+.product-buy-btn{
+    width:240px;
+    height:52px;
+    background:#111827;
+    color:white;
+    border:none;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.product-buy-btn:hover{
+    background:#7c3aed;
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(124,58,237,.25);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:992px){
+
+.product-detail-info{
+    text-align:center;
+    padding:35px;
+}
+
+.product-detail-image{
+    padding:30px;
+}
+
+.product-detail-image img{
+    max-width:250px;
+}
+
+.product-attributes{
+    grid-template-columns:1fr;
+}
+
+.product-stock{
+    margin:0 auto 25px;
+}
+
+.product-buy-btn{
+    width:100%;
+}
+
+}
+
+@media(max-width:576px){
+
+.product-details{
+    padding:20px 10px;
+}
+
+.product-title{
+    font-size:1.5rem;
+}
+
+.product-price{
+    font-size:1.7rem;
+}
+
+.product-detail-info{
+    padding:20px;
+}
+
+.product-detail-image img{
+    max-width:200px;
+}
+
 }

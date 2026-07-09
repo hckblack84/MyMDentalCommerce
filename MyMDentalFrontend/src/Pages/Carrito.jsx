@@ -196,9 +196,15 @@ const createOrderAndFetchPreferenceId = async () => {
                 <button className='purchase-btn' onClick={() => confirmPurchase()} disabled={cart.length === 0}>
                     Finalizar Compra
                 </button>
+
+
+                <button className='Pagar_mercado' onClick={() => createOrderAndFetchPreferenceId()}>Pagar con Mercado Pago</button>
+                <button className='log-id' onClick={() => console.log('ID actual:', preferenceId)}>Impresion Consola</button>
                 
             </div>
         </div>
+
+        
         
 {preferenceId && !error && (
     <Wallet
@@ -209,8 +215,6 @@ const createOrderAndFetchPreferenceId = async () => {
 
 {error && <p style={{ color: 'red' }}>{errorBody}</p>}
 
-        <button onClick={() => createOrderAndFetchPreferenceId()}>get id</button>
-        <button onClick={() => console.log('ID actual:', preferenceId)}>log id</button>
         </>
     )
 }

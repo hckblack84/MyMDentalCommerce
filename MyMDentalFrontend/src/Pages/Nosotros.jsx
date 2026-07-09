@@ -1,76 +1,106 @@
 import React from "react";
+import "../Styles/Nosotros.css";
 
-const TeamMember = ({ name, role, description }) => (
-  <div className="col-md-4 mb-4">
-    <div className="card h-100 border-0 shadow-sm text-center p-3">
-      <div className="d-flex justify-content-center">
-        <div className="rounded-circle bg-secondary mt-3" style={{ width: '100px', height: '100px' }}>
-        </div>
-      </div>
-      <div className="card-body">
-        <h5 className="card-title fw-bold">{name}</h5>
-        <h6 className="card-subtitle mb-2 text-primary">{role}</h6>
-        <p className="card-text text-muted">{description}</p>
-      </div>
+const FeatureCard = ({ title, description }) => (
+
+  <div className="col-lg-4 col-md-6 mb-4">
+    <div className="feature-card h-100">
+     <div className="feature-line"></div>
+      <h4>{title}</h4>
+      <p>{description}</p>
     </div>
   </div>
 );
 
+
+
 export default function Nosotros() {
   return (
-    <div className="bg-light">
-      {/* Hero Section - Banner principal */}
-      <section className="py-5 text-center bg-dark text-white shadow-sm">
-        <div className="container py-5">
-          <h1 className="display-4 fw-bold">Sobre Nosotros</h1>
-          <p className="lead">Liderando el camino hacia experiencias web innovadoras.</p>
+    <div className="nosotros-page">
+      {/* HERO */}
+      <section className="hero-section">
+        <div className="container">
+          <p className="hero-subtitle">
+            SOBRE MYM DENTAL
+          </p>
+          <h1 className="hero-title">
+            Innovando la forma de adquirir
+            <br />
+            insumos dentales.
+          </h1>
+          <p className="hero-text">
+            En MyM Dental creemos que la tecnología puede transformar la forma en
+            que clínicas y profesionales de la odontología adquieren sus
+            materiales. Nuestra plataforma ofrece una experiencia simple,
+            moderna y segura para acceder a un amplio catálogo de productos
+            especializados.
+          </p>
         </div>
       </section>
-
-      {/* Mission Section - Nuestra Misión */}
-      <section className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 text-center">
-            <h2 className="display-6 fw-semibold mb-4 border-bottom pb-2">Nuestra Misión</h2>
-            <p className="fs-5 text-secondary leading-relaxed">
-              En nuestra empresa, nos dedicamos a potenciar el crecimiento tecnológico 
-              brindando herramientas que simplifican lo complejo. Nuestra pasión es 
-              crear soluciones que sean tanto potentes como intuitivas para nuestros usuarios.
+      {/* HISTORIA */}
+      <section className="history-section">
+        <div className="container">
+          <div className="history-card">
+            <h2>Nuestra Historia</h2>
+            <p>
+              MyM Dental nació con el objetivo de modernizar la compra de
+              insumos odontológicos. Nuestro compromiso es facilitar el acceso
+              a productos especializados mediante una plataforma intuitiva,
+              transparente y enfocada en las necesidades de clínicas,
+              profesionales y estudiantes del área dental.
             </p>
           </div>
         </div>
       </section>
-
-      {/* Team Section - El Equipo */}
-      <section className="py-5 bg-white">
+      {/* MISIÓN Y VISIÓN */}
+      <section className="mission-section">
         <div className="container">
-          <h2 className="text-center mb-5 fw-bold">Nuestro Equipo</h2>
+          <div className="row g-4">
+            <div className="col-lg-6">
+              <div className="info-card">
+                <h3>Nuestra Misión</h3>
+                <p>
+                  Proporcionar una plataforma confiable para la adquisición de
+                  insumos odontológicos, entregando una experiencia moderna,
+                  sencilla y enfocada en la calidad de nuestros productos.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="info-card">
+                <h3>Nuestra Visión</h3>
+                <p>
+                  Ser una empresa referente en el comercio electrónico de
+                  insumos dentales, destacando por la innovación, confianza y
+                  compromiso con el sector odontológico.
+                </p>
+              </div>
+            </div>
+          </div>
+       </div>
+     </section>
+     {/* POR QUÉ ELEGIRNOS */}
+      <section className="values-section">
+        <div className="container">
+          <h2 className="section-title">
+            ¿Por qué elegir MyM Dental?
+          </h2>
           <div className="row">
-            <TeamMember 
-              name="Jane Doe" 
-              role="Directora Ejecutiva (CEO)" 
-              description="Visión estratégica y liderazgo con más de 10 años de experiencia."
+            <FeatureCard
+              title="Especialización"
+              description="Nuestro catálogo está enfocado exclusivamente en productos para el área odontológica, facilitando la búsqueda de los insumos adecuados."
             />
-            <TeamMember 
-              name="John Smith" 
-              role="Director de Tecnología (CTO)" 
-              description="Experto en arquitectura de software y optimización de sistemas."
+            <FeatureCard
+              title="Transparencia"
+              description="Brindamos información clara y actualizada sobre cada producto para que puedas tomar decisiones con confianza."
             />
-            <TeamMember 
-              name="Alice Johnson" 
-              role="Diseñadora Principal" 
-              description="Transformando ideas en interfaces visuales impactantes y funcionales."
+            <FeatureCard
+              title="Innovación"
+              description="Apostamos por una plataforma moderna y eficiente que simplifique la experiencia de compra para nuestros clientes."
             />
           </div>
         </div>
       </section>
-
-      {/* Footer simple para la sección */}
-      <footer className="py-4 bg-dark text-white-50 text-center">
-        <div className="container">
-          <small>&copy; 2026 MyDentistCommerce. Todos los derechos reservados.</small>
-        </div>
-      </footer>
     </div>
   );
 }
