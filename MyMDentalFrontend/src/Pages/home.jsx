@@ -4,14 +4,15 @@ import carrusel2 from "../assets/Imagenes/Carrusel_2.png";
 import carrusel3 from "../assets/Imagenes/Carrusel_3.png";
 import carrusel4 from "../assets/Imagenes/Carrusel_4.png";
 import carrusel5 from "../assets/Imagenes/Carrusel_5.png";
-import marca3m from "../assets/Imagenes/Marcas/3M.png";
-import marcaBisco from "../assets/Imagenes/Marcas/bisco.webp";
-import marcaDentsply from "../assets/Imagenes/Marcas/debtSply.png";
-import marcaKerr from "../assets/Imagenes/Marcas/kerr.jpg";
-import marcaLogo1 from "../assets/Imagenes/Marcas/logo1.jpg";
-import marcaMaquira from "../assets/Imagenes/Marcas/maquira.png";
-import marcaMicrodont from "../assets/Imagenes/Marcas/Microdont.png";
-import marcaSkydent from "../assets/Imagenes/Marcas/Skydent.png";
+import logo3m from "../assets/Imagenes/Marcas/3M.png";
+import logoBisco from "../assets/Imagenes/Marcas/bisco.webp";
+import logoDentsply from "../assets/Imagenes/Marcas/debtSply.png";
+import logoKerr from "../assets/Imagenes/Marcas/kerr.jpg";
+import logo1 from "../assets/Imagenes/Marcas/logo1.jpg";
+import logoMaquira from "../assets/Imagenes/Marcas/maquira.png";
+import logoMicrodont from "../assets/Imagenes/Marcas/Microdont.png";
+import logoSkydent from "../assets/Imagenes/Marcas/Skydent.png";
+
 import Productos from "../Components/Productos";
 import "../Styles/homeStyle.css";
 
@@ -57,37 +58,41 @@ export default function Home() {
             </button>
         </div>
 
+<div className="div">
+     <h1 className="encabezadoHome"> Nuestros proveedores </h1>
+</div>
+
         <div className="mid">
             <div className="marca-card">
-                <img src={marca3m} alt="3M"/>
+                <img src={logo3m} alt="3M"/>
                 <span className="marca-nombre">3M</span>
             </div>
             <div className="marca-card">
-                <img src={marcaBisco} alt="Bisco"/>
+                <img src={logoBisco} alt="Bisco"/>
                 <span className="marca-nombre">Bisco</span>
             </div>
             <div className="marca-card">
-                <img src={marcaDentsply} alt="Dentsply"/>
+                <img src={logoDentsply} alt="Dentsply"/>
                 <span className="marca-nombre">Dentsply</span>
             </div>
             <div className="marca-card">
-                <img src={marcaKerr} alt="Kerr"/>
+                <img src={logoKerr} alt="Kerr"/>
                 <span className="marca-nombre">Kerr</span>
             </div>
             <div className="marca-card">
-                <img src={marcaLogo1} alt="Logo"/>
-                <span className="marca-nombre">Logo</span>
+                <img src={logo1} alt="Logo1"/>
+                <span className="marca-nombre">Logo1</span>
             </div>
             <div className="marca-card">
-                <img src={marcaMaquira} alt="Maquira"/>
+                <img src={logoMaquira} alt="Maquira"/>
                 <span className="marca-nombre">Maquira</span>
             </div>
             <div className="marca-card">
-                <img src={marcaMicrodont} alt="Microdont"/>
+                <img src={logoMicrodont} alt="Microdont"/>
                 <span className="marca-nombre">Microdont</span>
             </div>
             <div className="marca-card">
-                <img src={marcaSkydent} alt="Skydent"/>
+                <img src={logoSkydent} alt="Skydent"/>
                 <span className="marca-nombre">Skydent</span>
             </div>
         </div>
