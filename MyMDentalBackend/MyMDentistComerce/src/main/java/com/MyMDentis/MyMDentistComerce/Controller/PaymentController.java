@@ -30,9 +30,9 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody Map<String, Object> notification) {
-        log.info("New webhook: " + notification);
+        log.info("New webhook: " + notification.toString());
 
-        if (notification.containsKey("type") && "payment".equals(notification.get("type"))) {
+        /*if (notification.containsKey("type") && "payment".equals(notification.get("type"))) {
             log.info("Payment notification received.");
             Object dataObject = notification.get("data");
             if (dataObject instanceof Map) {
@@ -50,7 +50,7 @@ public class PaymentController {
             }
         } else {
             log.info("it isn't ppayment type.");
-        }
+        }*/
         return new ResponseEntity<>("Notification received", HttpStatus.OK);
     }
 }
