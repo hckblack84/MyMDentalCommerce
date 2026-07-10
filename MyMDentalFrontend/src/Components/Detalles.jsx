@@ -59,7 +59,7 @@ const Detalles = () => {
 
           <div className="col-lg-5 product-detail-image">
             <img
-              src={logoImagen}
+              src={producto.urlProduct}
               alt={producto.productName}
             />
           </div>

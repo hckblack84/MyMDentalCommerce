@@ -63,7 +63,7 @@ export default function Productos({ isFiltered = false, filter = "" }) {
           <div className="card-tecnica">
             <div className="card-tecnica__image">
               <img
-                src={logoImagen}
+                src={producto.urlProduct}
                 alt={producto.productName}
                 className="card-tecnica__img"
               />
