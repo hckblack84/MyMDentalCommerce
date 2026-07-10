@@ -19,5 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByDepartment(Department department);
     long countByDepartment(Department department);
     Page<Product> findByDepartment(Department department, Pageable pageable);
+    Page<Product> findByActiveProduct(boolean activeProduct, Pageable pageable);
+    Page<Product> findByActiveProductAndDepartment(boolean activeProduct, Department department, Pageable pageable);
 
 }

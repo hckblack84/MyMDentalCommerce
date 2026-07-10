@@ -69,7 +69,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<DTOProductAdmin> getProductsAdminByPage(int pageIndex) {
         Pageable pageable = PageRequest.of(pageIndex, 10);
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findByActiveProduct(true, pageable);
         return productPage.getContent().stream()
                 .map(product -> new DTOProductAdmin().parseDTOProductAdmin(product))
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<DTOProductClient> getProductsClientByPage(int pageIndex) {
         Pageable pageable = PageRequest.of(pageIndex, 10);
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findByActiveProduct(true, pageable);
         return productPage.getContent().stream()
                 .map(product -> new DTOProductClient().parseDTOProductClient(product))
                 .collect(Collectors.toList());
@@ -103,7 +103,8 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<DTOProductClient> getFilterClientProductsByPage(String filter, int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Product> productsPage = productRepository.findByDepartment(departmentRepository.findByNameDepartment(filter)
+        Page<Product> productsPage = productRepository
+                .findByActiveProductAndDepartment(true, departmentRepository.findByNameDepartment(filter)
                 .orElseThrow(() ->
                         new NotFoundEntityException(ExceptionValues.DEPARTMENT_NOT_FOUND_CODE, Entities.DEPARTMENT, ExceptionValues.DEPARTMENT_NOT_FOUND_MESSAGE)), pageable);
 
